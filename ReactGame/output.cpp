@@ -33,17 +33,25 @@ uint8_t outputPins[NUM_LEDS] = {
 };
 
 void initOutput(){
-  for (int i = 0; i < NUM_LEDS; i++) {
-    pinMode(outputPins[i], OUTPUT);     
-  }
-
-  LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,16,2);
-  lcd.init();
-  lcd.backlight();
-
   if (getCurrentState() == INTRO_STATE) {
+    for (int i = 0; i < NUM_LEDS; i++) {
+      pinMode(outputPins[i], OUTPUT);     
+    }
+
+    LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,16,2);
+    lcd.init();
+    
     lcd.setCursor(5, 1);
     lcd.print("React!");
+  }
+
+  lcd.backlight();
+}
+
+void resetOutput() {
+  for (int i = 0; i < NUM_LEDS; i++) {
+    digitalWrite(outputPins[i], LOW);
+    lcd.noBacklight();   
   }
 }
 
@@ -77,14 +85,3 @@ void fadeLed() {
     }
   }
 }
-
-void resetOutput() {
-  for (int i = 0; i < NUM_LEDS; i++) {
-    digitalWrite(outputPins[i], LOW);
-    lcd.noBacklight();   
-  }
-}
-
-
-
-

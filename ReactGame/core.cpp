@@ -65,6 +65,8 @@ void sleep(){
     Serial.println("Sleep...");
   }
 
+  resetOutput();
+
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   sleep_enable();
 
@@ -74,13 +76,11 @@ void sleep(){
   sleep_disable(); // after interrupt 
   power_all_enable();
 
-  
+  initOutput();
 
-
-
-  /* change the state if button 1 is pressed or max time elapsed*/
-  if (isButtonPressed(1) || getCurrentTimeInState() > MAX_TIME_IN_STAGE2_STATE){
-    changeState(FINAL_STATE);          
+  /* change the state if one button is pressed */
+  if (isAtLeastOneButtonPressed()){
+    changeState(INTRO_STATE);          
   }
 }
 

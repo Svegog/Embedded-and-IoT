@@ -56,6 +56,13 @@ bool hasBeenPressed(int index){
   return buttonPressed[index]; 
 }
 
+bool isAtLeastOneButtonPressed() {
+  bool result = false;
+  for (int i = 0; i < NUM_BUTTONS; i++) {
+    result = result || isButtonPressed[i];
+  }
+  return result;
+}
 
 
 

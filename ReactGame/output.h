@@ -2,5 +2,8 @@
 #define __OUTPUT__
 
 void initOutput();
+void resetOutput();
+void printCharOnScreen();
+void fadeLed();
  
 #endif
