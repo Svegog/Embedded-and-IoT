@@ -6,5 +6,6 @@ void resetInput();
 bool isButtonPressed(int buttonIndex);
 bool isAtLeastOneButtonPressed();
 bool allButtonPressed();
+int getNumberOfPress(int player);
  
 #endif

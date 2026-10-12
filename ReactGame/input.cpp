@@ -12,6 +12,7 @@
 
 uint8_t inputPins[NUM_BUTTONS] = {P1_BUT_PIN, P2_BUT_PIN};
 volatile int numberOfPress[NUM_PLAYERS];
+int points[NUM_PLAYERS];
 bool buttonPressed[NUM_BUTTONS] = {false, false};
 
 /* used for debouncing */
@@ -22,18 +23,6 @@ void buttonHandlerP1(){ buttonHandler(P1); }
 void buttonHandlerP2(){ buttonHandler(P2); }
 
 void (*buttonHandlers[NUM_BUTTONS])() = { buttonHandlerP1, buttonHandlerP2 };
-
-void buttonHandler(int i){
-  long ts = millis();
-  if (ts - lastButtonPressedTimestamps[i] > BOUNCING_TIME){
-    lastButtonPressedTimestamps[i] = ts;
-    int status = digitalRead(inputPins[i]);
-    if (status == HIGH && !buttonPressed[i]) { 
-        buttonPressed[i] = true;
-        numberOfPress[i] += 1;
-    }
-  }
-}
 
 void buttonHandler(int i){
   unsigned long ts = millis();
@@ -89,6 +78,13 @@ bool allButtonPressed() {
     result = result && isButtonPressed(i);
   }
   return result;
+}
+
+int getNumberOfPress(int player){
+  noInterrupts();
+  int n = numberOfPress[player];
+  interrupts();
+  return n;
 }
 
 

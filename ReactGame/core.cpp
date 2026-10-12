@@ -14,21 +14,6 @@
 #define MAX_WAIT 5000
 #define T1 5000
 
-const long intervalLCD = 400;
-const long intervalLCD = 400;
-
-const char startString[] = "Welcome to the React! Game. Press Buttons to Start ";
-const int lenght = sizeof(startString) - 1;
-const int displayLenght = 16;
-
-unsigned long currentTime;
-unsigned long previousTime = 0;
-int pos = 0;
-
-int brightness1 = 0;
-int brightness2 = 255;
-int fadeAmount = 5;
-
 bool gamestarted = false;
 long waitTime;
 int N;
@@ -100,10 +85,10 @@ void start(){
 
 void ingame() {
   if (isJustEnteredInState()){
+    waitTime = random(0, MAX_WAIT + 1);
     Serial.println("In Game...");
     resetInput();
     resetOutput();
-    waitTime = random(0, MAX_WAIT + 1);
   }
 
   if (gamestarted) {

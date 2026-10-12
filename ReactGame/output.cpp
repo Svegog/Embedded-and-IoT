@@ -9,7 +9,7 @@
 #define BOUNCING_TIME 100
 
 const long intervalLCD = 400;
-const long intervalLed = 20;
+const long intervalLED = 20;
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,16,2);
 
@@ -17,8 +17,11 @@ const char startString[] = "Welcome to the React! Game. Press Buttons to Start "
 const int lenght = sizeof(startString) - 1;
 const int displayLenght = 16;
 
-unsigned long currentTime;
-unsigned long previousTime = 0;
+unsigned long currentTimeLED;
+unsigned long currentTimeLCD;
+
+unsigned long previousTimeLED = 0;
+unsigned long previousTimeLCD = 0;
 int pos = 0;
 
 int brightness1 = 0;
@@ -63,10 +66,10 @@ void resetOutput() {
 }
 
 void printCharOnScreen() {
-  currentTime = getCurrentTimeInState();
+  currentTimeLCD = getCurrentTimeInState();
 
-  if (currentMillis - lastUpdate >= interval) {
-    lastUpdate = currentMillis;
+  if (currentTimeLCD - previousTimeLCD >= intervalLCD) {
+    previousTimeLCD = currentTimeLCD;
 
     lcd.setCursor(0, 0);
     for (int c = 0; c < displayLenght; c++) {
@@ -78,9 +81,11 @@ void printCharOnScreen() {
 }
 
 void fadeLed() {
-  currentTime = getCurrentState(); 
+  currentTimeLED = getCurrentTimeInState(); 
 
-  if (currentTime - previousTime >= intervalLed) {
+  if (currentTimeLED - previousTimeLED >= intervalLED) {
+    lastUpdateLED = currentTimeLED;
+
     analogWrite(P1_RED_LED_PIN, brightness1);
     analogWrite(P2_RED_LED_PIN, brightness2);
   
