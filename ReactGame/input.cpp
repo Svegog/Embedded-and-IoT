@@ -9,6 +9,7 @@
 // #define __DEBUG__
 
 uint8_t inputPins[NUM_BUTTONS] = {P1_BUT_PIN, P2_BUT_PIN};
+int numberOfPress[NUM_PLAYERS] = {0,0};
 bool buttonPressed[NUM_BUTTONS] = {false, false};
 
 /* used for debouncing */
@@ -27,6 +28,7 @@ void buttonHandler(int i){
     int status = digitalRead(inputPins[i]);
     if (status == HIGH && !buttonPressed[i]) { 
         buttonPressed[i] = true;
+        numberOfPress[i] += 1;
     }
   }
 }

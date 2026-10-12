@@ -2,10 +2,13 @@
 #include "config.h"
 #include "core.h"
 #include "input.h" 
+#include "output.h"
 
 void setup() {
   initCore();
   initInput();
+  initOutput();
+
   changeState(INTRO_STATE);
 }
 
@@ -15,13 +18,16 @@ void loop(){
   case INTRO_STATE:
     intro();
     break;
-  case STAGE1_STATE:
-    stage1();
+  case START_STATE:
+    start();
     break;
-  case STAGE2_STATE:
-    stage2();
+  case SLEEP_STATE:
+    sleep();
     break;
-  case FINAL_STATE:
+  case INGAME_STATE:
+    ingame();
+    break;
+  case GAMEOVER_STATE:
     finalize();
     break;
   }

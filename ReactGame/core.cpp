@@ -19,15 +19,14 @@ void initCore(){
 }
 
 void intro(){
-  
-
   int dt = getCurrentTimeInState();
+  
   if (dt > MAX_TIME_IN_INTRO_STATE){
     changeState(SLEEP_STATE);
   }
 }
 
-void stage1(){
+void start(){
   if (isJustEnteredInState()){
     Serial.println("Stage1...");
     resetInput();
@@ -39,7 +38,7 @@ void stage1(){
   }
 }
 
-void stage2(){
+void sleep(){
   if (isJustEnteredInState()){
     Serial.println("Stage2...");
   }
@@ -49,6 +48,8 @@ void stage2(){
     changeState(FINAL_STATE);          
   }
 }
+
+void ingame() {}
 
 void finalize(){
   if (isJustEnteredInState()){
