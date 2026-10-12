@@ -84,23 +84,29 @@ void start(){
 }
 
 void ingame() {
-  if (isJustEnteredInState()){
+  if (isJustEnteredInState()) {
     waitTime = random(0, MAX_WAIT + 1);
-    Serial.println("In Game...");
+    gamestarted = false;
     resetInput();
     resetOutput();
   }
 
-  if (gamestarted) {
-    // codice per il gioco cominciato
-  } else {
-    if (getCurrentTimeInState() > waitTime) {
-      gamestarted = true;
-      N = random(1, 4);
-    }
+  if (!gamestarted && getCurrentTimeInState() > waitTime) {
+    gamestarted = true;
+    N = random(1, 4);
+    printValue(N);
   }
 
-  // codice se qualcuno agisce durante il tempo di attesa
+  for (int i = 0; i < NUM_PLAYERS; i++) {
+    int presses = getNumberOfPress(i);
+    if (presses == 0) continue;
+
+    if (!gamestarted || presses > N) {
+      // penalty to i TODO
+    } else if (presses == N) {
+      // i win TODO
+    }
+  }
 }
 
 void finalize(){

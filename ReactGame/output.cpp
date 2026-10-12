@@ -66,7 +66,7 @@ void resetOutput() {
 }
 
 void printCharOnScreen() {
-  currentTimeLCD = getCurrentTimeInState();
+  currentTimeLCD = millis();
 
   if (currentTimeLCD - previousTimeLCD >= intervalLCD) {
     previousTimeLCD = currentTimeLCD;
@@ -81,7 +81,7 @@ void printCharOnScreen() {
 }
 
 void fadeLed() {
-  currentTimeLED = getCurrentTimeInState(); 
+  currentTimeLED = millis(); 
 
   if (currentTimeLED - previousTimeLED >= intervalLED) {
     lastUpdateLED = currentTimeLED;

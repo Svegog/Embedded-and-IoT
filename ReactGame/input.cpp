@@ -51,7 +51,8 @@ void initInput(){
 void resetInput(){
   long ts = millis();
   for (int i = 0; i < NUM_BUTTONS; i++) {
-    buttonPressed[i] = false;      
+    buttonPressed[i] = false;
+    numberOfPress[i] = 0;      
     lastButtonPressedTimestamps[i] = ts;    
   }
 }
