@@ -11,8 +11,8 @@
 
 void initCore();
 void intro();
-void start();
 void sleep();
+void start();
 void ingame();
 void finalize();
 

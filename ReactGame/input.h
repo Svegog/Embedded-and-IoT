@@ -5,5 +5,6 @@ void initInput();
 void resetInput();
 bool isButtonPressed(int buttonIndex);
 bool isAtLeastOneButtonPressed();
+bool allButtonPressed();
  
 #endif

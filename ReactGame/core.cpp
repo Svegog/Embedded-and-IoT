@@ -46,17 +46,9 @@ void intro(){
 
   printCharOnScreen();
   fadeLed();
-}
-
-void start(){
-  if (isJustEnteredInState()){
-    Serial.println("Start...");
-    resetInput();
-  }
-
-  /* change the state if button 0 is pressed */
-  if (isButtonPressed(0)){
-    changeState(STAGE2_STATE);          
+  
+  if (allButtonPressed()) {
+    changeState(START_STATE);
   }
 }
 
@@ -78,9 +70,21 @@ void sleep(){
 
   initOutput();
 
-  /* change the state if one button is pressed */
+  // change the state if one button is pressed
   if (isAtLeastOneButtonPressed()){
     changeState(INTRO_STATE);          
+  }
+}
+
+void start(){
+  if (isJustEnteredInState()){
+    Serial.println("Start...");
+    resetInput();
+  }
+
+  /* change the state if button 0 is pressed */
+  if (isButtonPressed(0)){
+    changeState(STAGE2_STATE);          
   }
 }
 

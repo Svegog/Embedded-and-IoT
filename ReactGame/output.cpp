@@ -9,7 +9,9 @@
 #define BOUNCING_TIME 100
 
 const long intervalLCD = 400;
-const long intervalLed = 400;
+const long intervalLed = 20;
+
+LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,16,2);
 
 const char startString[] = "Welcome to the React! Game. Press Buttons to Start ";
 const int lenght = sizeof(startString) - 1;
@@ -33,16 +35,20 @@ uint8_t outputPins[NUM_LEDS] = {
 };
 
 void initOutput(){
-  if (getCurrentState() == INTRO_STATE) {
+  int status = getCurrentState();
+
+  if (status == INTRO_STATE) {
     for (int i = 0; i < NUM_LEDS; i++) {
       pinMode(outputPins[i], OUTPUT);     
     }
 
-    LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,16,2);
     lcd.init();
-    
     lcd.setCursor(5, 1);
     lcd.print("React!");
+
+  } else if(status == START_STATE) {
+    lcd.setCursor(5, 0);
+    lcd.print("Go!");
   }
 
   lcd.backlight();
@@ -51,6 +57,7 @@ void initOutput(){
 void resetOutput() {
   for (int i = 0; i < NUM_LEDS; i++) {
     digitalWrite(outputPins[i], LOW);
+    lcd.clear();
     lcd.noBacklight();   
   }
 }

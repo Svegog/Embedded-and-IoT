@@ -1,6 +1,8 @@
 #include "input.h"
 #include "Arduino.h"
 #include "config.h"
+#include "kernel.h"
+#include "core.h"
 
 #include <EnableInterrupt.h>
 
@@ -9,7 +11,7 @@
 // #define __DEBUG__
 
 uint8_t inputPins[NUM_BUTTONS] = {P1_BUT_PIN, P2_BUT_PIN};
-int numberOfPress[NUM_PLAYERS] = {0,0};
+volatile int numberOfPress[NUM_PLAYERS];
 bool buttonPressed[NUM_BUTTONS] = {false, false};
 
 /* used for debouncing */
@@ -33,9 +35,26 @@ void buttonHandler(int i){
   }
 }
 
+void buttonHandler(int i){
+  unsigned long ts = millis();
+  int status = digitalRead(inputPins[i]);
+
+  if (status == HIGH && !buttonPressed[i] && 
+    (ts - lastButtonPressedTimestamps[i] > BOUNCING_TIME)) { 
+      buttonPressed[i] = true;
+      numberOfPress[i] += 1;
+      lastButtonPressedTimestamps[i] = ts;
+  } 
+  else if (status == LOW && buttonPressed[i] && 
+    (ts - lastButtonPressedTimestamps[i] > BOUNCING_TIME)) {
+      buttonPressed[i] = false;
+      lastButtonPressedTimestamps[i] = ts;
+  }
+}
+
 void initInput(){
   for (int i = 0; i < NUM_BUTTONS; i++) {
-    pinMode(outputPins[i], OUTPUT); 
+    pinMode(inputPins[i], INPUT); 
     enableInterrupt(inputPins[i], buttonHandlers[i], CHANGE);
   }
 }
@@ -59,7 +78,15 @@ bool hasBeenPressed(int index){
 bool isAtLeastOneButtonPressed() {
   bool result = false;
   for (int i = 0; i < NUM_BUTTONS; i++) {
-    result = result || isButtonPressed[i];
+    result = result || isButtonPressed(i);
+  }
+  return result;
+}
+
+bool allButtonPressed() {
+  bool result = true;
+  for (int i = 0; i < NUM_BUTTONS; i++) {
+    result = result && isButtonPressed(i);
   }
   return result;
 }
