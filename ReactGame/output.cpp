@@ -56,10 +56,10 @@ void initOutput(){
 
 void resetOutput() {
   for (int i = 0; i < NUM_LEDS; i++) {
-    digitalWrite(outputPins[i], LOW);
-    lcd.clear();
-    lcd.noBacklight();   
+    digitalWrite(outputPins[i], LOW); 
   }
+  lcd.clear();
+  lcd.noBacklight();  
 }
 
 void printCharOnScreen() {
@@ -91,4 +91,10 @@ void fadeLed() {
       fadeAmount = -fadeAmount;
     }
   }
+}
+
+void printValue(int N) {
+  initOutput();
+  lcd.setCursor(8, 0);
+  lcd.print(N);
 }

@@ -10,6 +10,9 @@
 #define MAX_CHAR_ON_SCREEN 16
 
 #define MAX_TIME_IN_INTRO_STATE 10000
+#define DELAY_BEFORE_GAME 3000
+#define MAX_WAIT 5000
+#define T1 5000
 
 const long intervalLCD = 400;
 const long intervalLCD = 400;
@@ -26,10 +29,15 @@ int brightness1 = 0;
 int brightness2 = 255;
 int fadeAmount = 5;
 
+bool gamestarted = false;
+long waitTime;
+int N;
+
 /* core business logic */
 
 void initCore(){
   Serial.begin(9600);
+  randomSeed(analogRead(A0));
 }
 
 void intro(){
@@ -79,16 +87,36 @@ void sleep(){
 void start(){
   if (isJustEnteredInState()){
     Serial.println("Start...");
+    initOutput();
     resetInput();
   }
 
-  /* change the state if button 0 is pressed */
-  if (isButtonPressed(0)){
-    changeState(STAGE2_STATE);          
+  int dt = getCurrentTimeInState();
+
+  if (dt > DELAY_BEFORE_GAME){
+    changeState(INGAME_STATE);
   }
 }
 
-void ingame() {}
+void ingame() {
+  if (isJustEnteredInState()){
+    Serial.println("In Game...");
+    resetInput();
+    resetOutput();
+    waitTime = random(0, MAX_WAIT + 1);
+  }
+
+  if (gamestarted) {
+    // codice per il gioco cominciato
+  } else {
+    if (getCurrentTimeInState() > waitTime) {
+      gamestarted = true;
+      N = random(1, 4);
+    }
+  }
+
+  // codice se qualcuno agisce durante il tempo di attesa
+}
 
 void finalize(){
   if (isJustEnteredInState()){

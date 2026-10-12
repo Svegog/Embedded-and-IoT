@@ -5,5 +5,6 @@ void initOutput();
 void resetOutput();
 void printCharOnScreen();
 void fadeLed();
+void printValue(int N);
  
 #endif
