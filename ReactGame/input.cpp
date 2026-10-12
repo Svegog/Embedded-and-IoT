@@ -88,5 +88,10 @@ int getNumberOfPress(int player){
   return n;
 }
 
+void changePoint(int player, int point) {
+  points[player] += point;
+}
+
+
 
 

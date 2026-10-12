@@ -8,6 +8,8 @@
 #include <avr/power.h>
 
 #define MAX_CHAR_ON_SCREEN 16
+#define POINT 1
+#define PENALTY -1
 
 #define MAX_TIME_IN_INTRO_STATE 10000
 #define DELAY_BEFORE_GAME 3000
@@ -102,8 +104,10 @@ void ingame() {
     if (presses == 0) continue;
 
     if (!gamestarted || presses > N) {
+      changePoint(i, PENALTY);
       // penalty to i TODO
     } else if (presses == N) {
+      changePoint(i, POINT);
       // i win TODO
     }
   }
