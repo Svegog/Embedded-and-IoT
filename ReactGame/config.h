@@ -1,6 +1,9 @@
 #ifndef __CONFIG__
 #define __CONFIG__
 
+#define P1 0
+#define P2 1
+
 #define NUM_PLAYERS 2
 #define NUM_BUTTONS 2
 #define NUM_LEDS 4

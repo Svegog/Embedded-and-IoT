@@ -16,8 +16,8 @@ bool buttonPressed[NUM_BUTTONS] = {false, false};
 long lastButtonPressedTimestamps[NUM_BUTTONS];
 
 void buttonHandler(int i);
-void buttonHandlerP1(){ buttonHandler(0); }
-void buttonHandlerP2(){ buttonHandler(1); }
+void buttonHandlerP1(){ buttonHandler(P1); }
+void buttonHandlerP2(){ buttonHandler(P2); }
 
 void (*buttonHandlers[NUM_BUTTONS])() = { buttonHandlerP1, buttonHandlerP2 };
 
