@@ -33,7 +33,7 @@ void intro(){
     resetInput();
   }
 
-  int dt = getCurrentTimeInState();
+  long dt = getCurrentTimeInState();
 
   if (dt > MAX_TIME_IN_INTRO_STATE){
     changeState(SLEEP_STATE);
@@ -78,7 +78,7 @@ void start(){
     resetInput();
   }
 
-  int dt = getCurrentTimeInState();
+  long dt = getCurrentTimeInState();
 
   if (dt > DELAY_BEFORE_GAME){
     changeState(INGAME_STATE);
@@ -93,7 +93,9 @@ void ingame() {
     resetOutput();
   }
 
-  if (!gamestarted && getCurrentTimeInState() > waitTime) {
+  long dt = getCurrentTimeInState();
+
+  if (!gamestarted && dt > waitTime) {
     gamestarted = true;
     N = random(1, 4);
     printValue(N);
@@ -109,6 +111,10 @@ void ingame() {
     } else if (presses == N) {
       changePoint(i, POINT);
       // i win TODO
+    }
+
+    if (dt > T1) {
+      changeState(GAMEOVER_STATE); // timer for T1 end, game end TODO
     }
   }
 }
