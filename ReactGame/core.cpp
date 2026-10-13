@@ -14,9 +14,9 @@
 #define MAX_TIME_IN_INTRO_STATE 10000
 #define DELAY_BEFORE_GAME 3000
 #define MAX_WAIT 5000
-#define T1 5000
 
 bool gamestarted = false;
+long T1 = 5000;
 long waitTime;
 int N;
 
