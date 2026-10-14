@@ -17,9 +17,9 @@
 #define MAX_TIME_IN_INTRO_STATE 10000
 #define DELAY_BEFORE_GAME 3000
 #define MAX_WAIT 5000
-#define DELAY_BEFORE_NEW_ROUND 2000
-#define DELAY_BEFORE_RESTART 5000
+#define DELAY_BEFORE_NEW_ROUND 4000
 #define DELAY_GAME_OVER 2000
+#define DELAY_BEFORE_RESTART 5000
 
 bool gamestarted = false;
 bool endStringSet = false;
@@ -34,6 +34,7 @@ void initCore(){
   Serial.begin(9600);
   randomSeed(analogRead(A0));
   reductionFactor = 0; // TODO
+  Serial.println("BOOT"); // check if the boot fails
 }
 
 void intro(){

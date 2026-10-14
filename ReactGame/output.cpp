@@ -10,8 +10,8 @@
 #define WINNER_STRING_INDEX 2
 #define MAX_CHAR_ON_SCREEN 16
 
-const long intervalLCD = 400;
-const long intervalLED = 20;
+const long intervalLCD = 200;
+const long intervalLED = 30;
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,16,2);
 
@@ -52,10 +52,13 @@ void initOutput(){
     lcd.print("React!");
 
   } else if (status == START_STATE) {
-    lcd.setCursor(5, 0);
+
+    lcd.setCursor(7, 0);
     lcd.print("Go!");
+
   } else if (status == RESULT_STATE) {
-    lcd.setCursor(3, 0);
+
+    lcd.setCursor(3, 0); // hard coded, need fix
     lcd.print("P1");
     lcd.setCursor(3, 1);
     lcd.print(getPoint(P1));
