@@ -5,7 +5,8 @@
 #define START_STATE  2
 #define SLEEP_STATE  3
 #define INGAME_STATE   4
-#define GAMEOVER_STATE 5 
+#define RESULT_STATE 5
+#define GAMEOVER_STATE 6 
 
 /* core business logic  */
 
@@ -14,6 +15,7 @@ void intro();
 void sleep();
 void start();
 void ingame();
+void result();
 void finalize();
 
 #endif

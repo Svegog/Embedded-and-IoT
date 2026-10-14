@@ -106,18 +106,24 @@ void ingame() {
     if (presses == 0) continue;
 
     if (!gamestarted || presses > N) {
-      changePoint(i, PENALTY);
+      int value = PENALTY;
       // penalty to i TODO
     } else if (presses == N) {
-      changePoint(i, POINT);
+      int value = PENALTY;
       // i win TODO
     }
 
-    if (dt > T1) {
+    changeState(RESULT_STATE);
+    changePoint(i, value);
+    turnOnLEd(i, value);
+  }
+
+  if (dt > T1) {
       changeState(GAMEOVER_STATE); // timer for T1 end, game end TODO
     }
-  }
 }
+
+void result() {}
 
 void finalize(){
   if (isJustEnteredInState()){

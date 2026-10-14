@@ -49,7 +49,7 @@ void initOutput(){
     lcd.setCursor(5, 1);
     lcd.print("React!");
 
-  } else if(status == START_STATE) {
+  } else if (status == START_STATE) {
     lcd.setCursor(5, 0);
     lcd.print("Go!");
   }
@@ -84,7 +84,7 @@ void fadeLed() {
   currentTimeLED = millis(); 
 
   if (currentTimeLED - previousTimeLED >= intervalLED) {
-    lastUpdateLED = currentTimeLED;
+    previousTimeLED = currentTimeLED;
 
     analogWrite(P1_RED_LED_PIN, brightness1);
     analogWrite(P2_RED_LED_PIN, brightness2);
@@ -103,3 +103,5 @@ void printValue(int N) {
   lcd.setCursor(8, 0);
   lcd.print(N);
 }
+
+void 
