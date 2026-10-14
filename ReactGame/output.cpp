@@ -78,6 +78,14 @@ void resetOutput() {
 }
 
 void rotateCharOnScreen(const char* str) {
+  currentTimeLCD = millis();
+
+  if (currentTimeLCD - previousTimeLCD < intervalLCD) {
+    return;
+  }
+
+  previousTimeLCD = currentTimeLCD;
+
   if (str == NULL) return; // basic error handler
   int len = strlen(str);
   if (len == 0) return;
@@ -89,17 +97,13 @@ void rotateCharOnScreen(const char* str) {
     lastStr = str;
   }
 
-  currentTimeLCD = millis();
-  if (currentTimeLCD - previousTimeLCD >= intervalLCD) {
-    previousTimeLCD = currentTimeLCD;
-
-    lcd.setCursor(0, 0);
-    for (int c = 0; c < MAX_CHAR_ON_SCREEN; c++) {
-      int currentPos = (pos + c) % len;
-      lcd.print(str[currentPos]);
-    }
-    pos = (pos + 1) % len;
+  lcd.setCursor(0, 0);
+  for (int c = 0; c < MAX_CHAR_ON_SCREEN; c++) {
+    int currentPos = (pos + c) % len;
+    lcd.print(str[currentPos]);
   }
+  
+  pos = (pos + 1) % len;
 }
 
 void fadeLed() {

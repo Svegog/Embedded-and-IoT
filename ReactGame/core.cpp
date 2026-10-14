@@ -22,6 +22,7 @@
 #define DELAY_GAME_OVER 2000
 
 bool gamestarted = false;
+bool endStringSet = false;
 long T1 = T1_INITIAL;
 long waitTime;
 long reductionFactor;
@@ -76,10 +77,8 @@ void sleep(){
 
   initOutput();
 
-  // change the state if one button is pressed
-  if (isAtLeastOneButtonPressed()){
-    changeState(INTRO_STATE);          
-  }
+  // change the state after the interrupt
+  changeState(INTRO_STATE);         
 }
 
 void start(){
@@ -160,6 +159,7 @@ void result() {
 void gameOver(){
   if (isJustEnteredInState()){
     Serial.println("Finalize...");
+    resetOutput();
     initOutput();
     for (int i = 0; i < NUM_PLAYERS; i++) {
       changeLedState(i, PENALTY, HIGH);
@@ -168,20 +168,26 @@ void gameOver(){
 
   if (getCurrentTimeInState() > DELAY_GAME_OVER) {
     for (int i = 0; i < NUM_PLAYERS; i++) {
-      changeLedState(i, PENALTY, LOW)
+      changeLedState(i, PENALTY, LOW);
     };
   }
 
   if (isTie()) {
     rotateCharOnScreen(getGameMessage(GAMEOVER_TIE_STR));
   } else {
-    int winner = getWinner();
-    updateWinnerString(winner);
+    if (!endStringSet) {
+      int winner = getWinner();
+      updateWinnerString(winner);
+      endStringSet = true;
+    }
     rotateCharOnScreen(getGameMessage(GAMEOVER_WINNER_STR));
   }
 
   long dt = getCurrentTimeInState();
   if (dt > DELAY_BEFORE_RESTART) {
     changeState(INTRO_STATE);
+    endStringSet = false; 
+    // no need to reset the output.cpp string, because it will 
+    // be overwritten after every game
   }
 }
