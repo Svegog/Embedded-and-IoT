@@ -39,7 +39,7 @@ void intro(){
     changeState(SLEEP_STATE);
   }
 
-  printCharOnScreen();
+  rotateCharOnScreen();
   fadeLed();
   
   if (allButtonPressed()) {
@@ -98,6 +98,7 @@ void ingame() {
   if (!gamestarted && dt > waitTime) {
     gamestarted = true;
     N = random(1, 4);
+    initOutput();
     printValue(N);
   }
 
@@ -128,7 +129,7 @@ void result() {
     Serial.println("Result...");
   }
 
-  
+
 }
 
 void finalize(){

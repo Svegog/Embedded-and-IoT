@@ -13,8 +13,11 @@ const long intervalLED = 20;
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,16,2);
 
-const char startString[] = "Welcome to the React! Game. Press Buttons to Start ";
-const int lenght = sizeof(startString) - 1;
+char* strings[] = {
+  "Welcome to the React! Game. Press Buttons to Start ",
+  "Game Over - Tie",
+  "Game Over - The winner is XX"
+};
 const int displayLenght = 16;
 
 unsigned long currentTimeLED;
@@ -61,11 +64,12 @@ void resetOutput() {
   for (int i = 0; i < NUM_LEDS; i++) {
     digitalWrite(outputPins[i], LOW); 
   }
+  pos = 0;
   lcd.clear();
   lcd.noBacklight();  
 }
 
-void printCharOnScreen() {
+void rotateCharOnScreen() {
   currentTimeLCD = millis();
 
   if (currentTimeLCD - previousTimeLCD >= intervalLCD) {
@@ -99,7 +103,6 @@ void fadeLed() {
 }
 
 void printValue(int N) {
-  initOutput();
   lcd.setCursor(8, 0);
   lcd.print(N);
 }

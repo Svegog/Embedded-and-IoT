@@ -3,7 +3,7 @@
 
 void initOutput();
 void resetOutput();
-void printCharOnScreen();
+void rotateCharOnScreen();
 void fadeLed();
 void printValue(int N);
 int getGreenLed(int player);
