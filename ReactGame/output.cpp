@@ -35,7 +35,7 @@ uint8_t outputPins[NUM_LEDS] = {
   P1_GREEN_LED_PIN, 
   P2_RED_LED_PIN,
   P2_GREEN_LED_PIN
-};
+}; // odd are always green
 
 void initOutput(){
   int status = getCurrentState();
@@ -104,4 +104,16 @@ void printValue(int N) {
   lcd.print(N);
 }
 
-void 
+int getGreenLed(int player) {
+  return outputPins[player*2 + 1];
+}
+
+int getRedLed(int player) {
+  return outputPins[player*2];
+}
+
+void changeLedState(int player, int point, int state) {
+  int value = (state > 0) ? HIGH : LOW;
+  int pin = (point > 0) ? getGreenLed(player) : getRedLed(player);
+  digitalWrite(pin, value);
+}

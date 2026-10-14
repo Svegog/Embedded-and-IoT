@@ -107,15 +107,15 @@ void ingame() {
 
     if (!gamestarted || presses > N) {
       int value = PENALTY;
-      // penalty to i TODO
     } else if (presses == N) {
       int value = PENALTY;
-      // i win TODO
     }
 
     changeState(RESULT_STATE);
+    resetInput();
+    resetOutput();
     changePoint(i, value);
-    turnOnLEd(i, value);
+    changeLedState(i, value, HIGH);
   }
 
   if (dt > T1) {
@@ -123,7 +123,13 @@ void ingame() {
     }
 }
 
-void result() {}
+void result() {
+  if (isJustEnteredInState()){
+    Serial.println("Result...");
+  }
+
+  
+}
 
 void finalize(){
   if (isJustEnteredInState()){

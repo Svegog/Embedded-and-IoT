@@ -6,6 +6,8 @@ void resetOutput();
 void printCharOnScreen();
 void fadeLed();
 void printValue(int N);
-void turnOnLed(int player, int point);
+int getGreenLed(int player);
+int getRedLed(int player);
+void changeLedState(int player, int point, int state);
  
 #endif
