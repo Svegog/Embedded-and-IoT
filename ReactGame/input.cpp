@@ -113,5 +113,11 @@ int getWinner() {
   return resultIndex + 1; 
 }
 
+void resetPoint() {
+  for (int i = 0; i < NUM_PLAYERS; i++) {
+    points[i] = 0;
+  }
+}
+
 
 

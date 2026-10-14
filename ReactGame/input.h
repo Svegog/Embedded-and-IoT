@@ -10,5 +10,6 @@ int getNumberOfPress(int player);
 void changePoint(int player, int point);
 bool isTie();
 int getWinner();
+void resetPoint();
  
 #endif

@@ -27,8 +27,11 @@ void loop(){
   case INGAME_STATE:
     ingame();
     break;
+  case RESULT_STATE:
+    result();
+    break;
   case GAMEOVER_STATE:
-    finalize();
+    gameOver();
     break;
   }
 }

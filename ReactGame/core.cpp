@@ -14,6 +14,7 @@
 #define MAX_TIME_IN_INTRO_STATE 10000
 #define DELAY_BEFORE_GAME 3000
 #define MAX_WAIT 5000
+#define DELAY_BEFORE_NEW_ROUND 2000
 #define DELAY_BEFORE_RESTART 5000
 
 const char* currentMessage = nullptr;
@@ -124,7 +125,7 @@ void ingame() {
   }
 
   if (dt > T1) {
-      changeState(GAMEOVER_STATE); // timer for T1 end, game end TODO
+      changeState(GAMEOVER_STATE);
     }
 }
 
@@ -133,10 +134,15 @@ void result() {
     Serial.println("Result...");
   }
 
+  long dt = getCurrentTimeInState();
+
+  if (dt > DELAY_BEFORE_NEW_ROUND) {
+    changeState(INGAME_STATE);
+  }
 
 }
 
-void finalize(){
+void gameOver(){
   static char winnerMsgBuffer[40];
 
   if (isJustEnteredInState()){
@@ -155,5 +161,6 @@ void finalize(){
   long dt = getCurrentTimeInState();
   if (dt > DELAY_BEFORE_RESTART) {
     changeState(INTRO_STATE);
+    resetPoint();
   }
 }

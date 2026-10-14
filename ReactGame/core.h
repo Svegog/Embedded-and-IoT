@@ -16,6 +16,6 @@ void sleep();
 void start();
 void ingame();
 void result();
-void finalize();
+void gameOver();
 
 #endif
