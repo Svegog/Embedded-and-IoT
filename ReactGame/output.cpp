@@ -14,7 +14,7 @@ const long intervalLED = 20;
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,16,2);
 
-char* strings[] = {
+char strings[3][51] = { // hardcoded because message are fixed
   "Welcome to the React! Game. Press Buttons to Start ",
   "Game Over - Tie",
   "Game Over - The winner is XX"
@@ -134,5 +134,6 @@ const char* getGameMessage(MessageType type) {
 }
 
 void updateWinnerString(int winner) {
-  string[WINNER_STRING_INDEX][]
+  strings[WINNER_STRING_INDEX][25] = "P";
+  strings[WINNER_STRING_INDEX][26] = winner + "0";
 }
