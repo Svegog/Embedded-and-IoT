@@ -92,6 +92,26 @@ void changePoint(int player, int point) {
   points[player] += point;
 }
 
+// we NEED at least two player, fair enough because this is not a single player game lol
+bool isTie() {
+  int startValue = points[0]
+  for (int i = 1; i < NUM_PLAYERS; i++) {
+    if (startValue != points[i]) return false;
+  }
+  return true;
+}
+
+int getWinner() {
+  int resultIndex;
+  int max = 0; // max cannot be 0, the game should end if nobody press a button
+  for (int i = 0; i < NUM_PLAYERS; i++) {
+    if (points[i] > max) {
+      max = points[i];
+      resultIndex = i;
+    }
+  }
+  return resultIndex + 1; 
+}
 
 
 

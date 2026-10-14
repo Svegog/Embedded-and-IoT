@@ -1,12 +1,13 @@
-#include "output.h"
 #include "Arduino.h"
+#include "output.h"
 #include "config.h"
 #include "kernel.h"
-#include "core.h"
 
 #include <LiquidCrystal_I2C.h>
 
+#define WINNER_STRING_INDEX 2
 #define BOUNCING_TIME 100
+#define MAX_CHAR_ON_SCREEN 16
 
 const long intervalLCD = 400;
 const long intervalLED = 20;
@@ -30,8 +31,6 @@ int pos = 0;
 int brightness1 = 0;
 int brightness2 = 255;
 int fadeAmount = 5;
-
-// #define __DEBUG__
 
 uint8_t outputPins[NUM_LEDS] = {
   P1_RED_LED_PIN, 
@@ -64,23 +63,32 @@ void resetOutput() {
   for (int i = 0; i < NUM_LEDS; i++) {
     digitalWrite(outputPins[i], LOW); 
   }
-  pos = 0;
   lcd.clear();
   lcd.noBacklight();  
 }
 
-void rotateCharOnScreen() {
-  currentTimeLCD = millis();
+void rotateCharOnScreen(const char* str) {
+  if (str == NULL) return; // basic error handler
+  int len = strlen(str);
+  if (len == 0) return;
 
+  // reset cursor if string change
+  static const char* lastStr = NULL;
+  if (str != lastStr) {
+    pos = 0;
+    lastStr = str;
+  }
+
+  currentTimeLCD = millis();
   if (currentTimeLCD - previousTimeLCD >= intervalLCD) {
     previousTimeLCD = currentTimeLCD;
 
     lcd.setCursor(0, 0);
     for (int c = 0; c < displayLenght; c++) {
-      int currentPos = (pos + c) % lenght;
-      lcd.print(startString[currentPos]);
+      int currentPos = (pos + c) % len;
+      lcd.print(str[currentPos]);
     }
-    pos = (pos + 1) % lenght;
+    pos = (pos + 1) % len;
   }
 }
 
@@ -119,4 +127,12 @@ void changeLedState(int player, int point, int state) {
   int value = (state > 0) ? HIGH : LOW;
   int pin = (point > 0) ? getGreenLed(player) : getRedLed(player);
   digitalWrite(pin, value);
+}
+
+const char* getGameMessage(MessageType type) {
+  return strings[type];
+}
+
+void updateWinnerString(int winner) {
+  string[WINNER_STRING_INDEX][]
 }

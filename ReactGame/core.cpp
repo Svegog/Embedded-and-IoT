@@ -3,17 +3,20 @@
 #include "kernel.h"
 #include "input.h"
 #include "output.h"
+#include "config.h"
 
 #include <avr/sleep.h>
 #include <avr/power.h>
 
-#define MAX_CHAR_ON_SCREEN 16
 #define POINT 1
 #define PENALTY -1
 
 #define MAX_TIME_IN_INTRO_STATE 10000
 #define DELAY_BEFORE_GAME 3000
 #define MAX_WAIT 5000
+#define DELAY_BEFORE_RESTART 5000
+
+const char* currentMessage = nullptr;
 
 bool gamestarted = false;
 long T1 = 5000;
@@ -30,6 +33,7 @@ void initCore(){
 void intro(){
   if (isJustEnteredInState()){
     Serial.println("Intro...");
+    initOutput();
     resetInput();
   }
 
@@ -39,7 +43,7 @@ void intro(){
     changeState(SLEEP_STATE);
   }
 
-  rotateCharOnScreen();
+  rotateCharOnScreen(getMessage(WELCOME_STR));
   fadeLed();
   
   if (allButtonPressed()) {
@@ -133,10 +137,23 @@ void result() {
 }
 
 void finalize(){
+  static char winnerMsgBuffer[40];
+
   if (isJustEnteredInState()){
     Serial.println("Finalize...");
+    initOutput();
   }
-  changeState(INTRO_STATE);
-}
 
-void enterSleepState() {}
+  if (isTie()) {
+    rotateCharOnScreen(GAMEOVER_TIE_STR);
+  } else {
+    int result = getWinner();
+    updateWinnerString(result);
+    rotateCharOnScreen(GAMEOVER_WINNER_STR);
+  }
+
+  long dt = getCurrentTimeInState();
+  if (dt > DELAY_BEFORE_RESTART) {
+    changeState(INTRO_STATE);
+  }
+}
