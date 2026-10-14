@@ -1,12 +1,13 @@
 #include "Arduino.h"
 #include "output.h"
+#include "input.h"
 #include "config.h"
 #include "kernel.h"
+#include "core.h"
 
 #include <LiquidCrystal_I2C.h>
 
 #define WINNER_STRING_INDEX 2
-#define BOUNCING_TIME 100
 #define MAX_CHAR_ON_SCREEN 16
 
 const long intervalLCD = 400;
@@ -14,12 +15,11 @@ const long intervalLED = 20;
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,16,2);
 
-char strings[3][51] = { // hardcoded because message are fixed
+char strings[3][52] = { // hardcoded because message are fixed
   "Welcome to the React! Game. Press Buttons to Start ",
-  "Game Over - Tie",
-  "Game Over - The winner is XX"
+  "Game Over - Tie ",
+  "Game Over - The winner is XX "
 };
-const int displayLenght = 16;
 
 unsigned long currentTimeLED;
 unsigned long currentTimeLCD;
@@ -54,6 +54,16 @@ void initOutput(){
   } else if (status == START_STATE) {
     lcd.setCursor(5, 0);
     lcd.print("Go!");
+  } else if (status == RESULT_STATE) {
+    lcd.setCursor(3, 0);
+    lcd.print("P1");
+    lcd.setCursor(3, 1);
+    lcd.print(getPoint(P1));
+
+    lcd.setCursor(11, 0);
+    lcd.print("P2");
+    lcd.setCursor(11, 1);
+    lcd.print(getPoint(P2));
   }
 
   lcd.backlight();
@@ -84,7 +94,7 @@ void rotateCharOnScreen(const char* str) {
     previousTimeLCD = currentTimeLCD;
 
     lcd.setCursor(0, 0);
-    for (int c = 0; c < displayLenght; c++) {
+    for (int c = 0; c < MAX_CHAR_ON_SCREEN; c++) {
       int currentPos = (pos + c) % len;
       lcd.print(str[currentPos]);
     }
@@ -134,6 +144,6 @@ const char* getGameMessage(MessageType type) {
 }
 
 void updateWinnerString(int winner) {
-  strings[WINNER_STRING_INDEX][25] = "P";
-  strings[WINNER_STRING_INDEX][26] = winner + "0";
+  strings[WINNER_STRING_INDEX][26] = 'P';
+  strings[WINNER_STRING_INDEX][27] = '0' + winner;
 }

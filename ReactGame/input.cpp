@@ -2,21 +2,20 @@
 #include "Arduino.h"
 #include "config.h"
 #include "kernel.h"
-#include "core.h"
 
 #include <EnableInterrupt.h>
 
-#define BOUNCING_TIME 100
+#define BOUNCING_TIME 40 // both HIGH and LOW state
 
 // #define __DEBUG__
 
 uint8_t inputPins[NUM_BUTTONS] = {P1_BUT_PIN, P2_BUT_PIN};
 volatile int numberOfPress[NUM_PLAYERS];
 int points[NUM_PLAYERS];
-bool buttonPressed[NUM_BUTTONS] = {false, false};
+volatile bool buttonPressed[NUM_BUTTONS] = {false, false};
 
 /* used for debouncing */
-long lastButtonPressedTimestamps[NUM_BUTTONS];
+volatile long lastButtonPressedTimestamps[NUM_BUTTONS];
 
 void buttonHandler(int i);
 void buttonHandlerP1(){ buttonHandler(P1); }
@@ -50,19 +49,17 @@ void initInput(){
 
 void resetInput(){
   long ts = millis();
+  noInterrupts();
   for (int i = 0; i < NUM_BUTTONS; i++) {
     buttonPressed[i] = false;
     numberOfPress[i] = 0;      
     lastButtonPressedTimestamps[i] = ts;    
   }
+  interrupts();
 }
 
 bool isButtonPressed(int buttonIndex){
   return buttonPressed[buttonIndex];
-}
-
-bool hasBeenPressed(int index){
-  return buttonPressed[index]; 
 }
 
 bool isAtLeastOneButtonPressed() {
@@ -94,7 +91,7 @@ void changePoint(int player, int point) {
 
 // we NEED at least two player, fair enough because this is not a single player game lol
 bool isTie() {
-  int startValue = points[0]
+  int startValue = points[0];
   for (int i = 1; i < NUM_PLAYERS; i++) {
     if (startValue != points[i]) return false;
   }
@@ -102,9 +99,9 @@ bool isTie() {
 }
 
 int getWinner() {
-  int resultIndex;
-  int max = 0; // max cannot be 0, the game should end if nobody press a button
-  for (int i = 0; i < NUM_PLAYERS; i++) {
+  int resultIndex = 0;
+  int max = points[0];
+  for (int i = 1; i < NUM_PLAYERS; i++) {
     if (points[i] > max) {
       max = points[i];
       resultIndex = i;
@@ -117,6 +114,10 @@ void resetPoint() {
   for (int i = 0; i < NUM_PLAYERS; i++) {
     points[i] = 0;
   }
+}
+
+int getPoint(int player) {
+  return points[player];
 }
 
 

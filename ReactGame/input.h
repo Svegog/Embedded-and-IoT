@@ -11,5 +11,6 @@ void changePoint(int player, int point);
 bool isTie();
 int getWinner();
 void resetPoint();
+int getPoint(int player);
  
 #endif

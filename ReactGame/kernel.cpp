@@ -42,9 +42,10 @@ void updateStateTime(){
   currentTimeInState = millis() - enteredStateTime;
 }
 
+/*
 void logMsg(const String& msg){
   #ifdef __DEBUG__
   Serial.println(msg);
   #endif
 }
-
+*/

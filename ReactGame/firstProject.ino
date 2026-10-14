@@ -7,8 +7,6 @@
 void setup() {
   initCore();
   initInput();
-  initOutput();
-
   changeState(INTRO_STATE);
 }
 
