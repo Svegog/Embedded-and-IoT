@@ -1,11 +1,14 @@
+#include <LiquidCrystal_I2C.h>
+
 #include "Arduino.h"
 #include "output.h"
 #include "config.h"
 
-#include <LiquidCrystal_I2C.h>
 
 #define WINNER_STRING_INDEX 2
 #define MAX_CHAR_ON_SCREEN 16
+#define FIRST_POSITION_TO_MODIFY 26
+#define SECOND_POSITION_TO_MODIFY 27
 
 const long intervalLCD = 200;
 const long intervalLED = 30;
@@ -153,8 +156,8 @@ const char* getGameMessage(MessageType type) {
 }
 
 void updateWinnerString(int winner) {
-  strings[WINNER_STRING_INDEX][26] = 'P';
-  strings[WINNER_STRING_INDEX][27] = '0' + winner;
+  strings[WINNER_STRING_INDEX][FIRST_POSITION_TO_MODIFY] = 'P';
+  strings[WINNER_STRING_INDEX][SECOND_POSITION_TO_MODIFY] = '0' + winner;
 }
 
 void printLevelDifficulty(char choice) {

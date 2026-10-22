@@ -3,6 +3,8 @@
 
 // HARDWARE AND GAME CONFIG
 
+#define SEED_PIN A1
+
 #define P1 0
 #define P2 1
 
@@ -23,13 +25,13 @@
 // CORE CONFIG
 
 #define POINT 1
-#define PENALTY -1
+#define PENALTY (-1)
 
 #define T1_INITIAL 5000
 #define T1_MIN 500
 
 #define POTENTIOMETER_DELAY 50
-#define REDUCTION_MULTIPLIER 50
+#define REDUCTION_MULTIPLIER 150
 
 #define MAX_TIME_IN_INTRO_STATE 15000 // more time to choose difficulty
 #define DELAY_BEFORE_GAME 3000

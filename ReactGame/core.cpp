@@ -1,40 +1,46 @@
-#include "core.h"
+#include <avr/sleep.h>
+#include <avr/power.h>
+
 #include "Arduino.h"
+#include "core.h"
 #include "kernel.h"
 #include "input.h"
 #include "output.h"
 #include "score.h"
 #include "config.h"
 
-#include <avr/sleep.h>
-#include <avr/power.h>
+#define BAUD_RATE 9600
+#define MIN_POT_VALUE 0
+#define MAX_POT_VALUE 1024
+#define MINIMUM_DIFFICULTY 1
+#define MAXIMUM_DIFFICULTY 5 // need to be 1 over the real maximum difficulty so the map function can also output value 4
 
 bool gamestarted = false;
 bool endStringSet = false;
 
-long T1 = T1_INITIAL;
-long waitTime;
-long reductionFactor;
+unsigned long T1 = T1_INITIAL;
+unsigned long waitTime;
+unsigned long reductionFactor;
 int N;
 
-long previousTimePot;
+unsigned long previousTimePot;
 
 void printStartSection() {
   Serial.println("Choose difficulty with potentiometer");
-  Serial.println("A letter will be print on screen");
   Serial.println("----------------------------------------------");
-  Serial.println("E for easy");
-  Serial.println("M for medium");
-  Serial.println("H for hard");
-  Serial.println("S for superhard");
+  Serial.println("A letter will be print on screen, meaning:");
+  Serial.println("    E for easy");
+  Serial.println("    M for medium");
+  Serial.println("    H for hard");
+  Serial.println("    S for superhard");
   Serial.println("----------------------------------------------");
 }
 
 void initCore(){
-  Serial.begin(9600);
-  randomSeed(analogRead(POTENT_PIN));
+  Serial.begin(BAUD_RATE);
+  randomSeed(analogRead(SEED_PIN));
   reductionFactor = 0;
-  Serial.println("BOOT");
+  Serial.println("Boot...");
 }
 
 void intro(){
@@ -43,14 +49,13 @@ void intro(){
     printStartSection();
   
     initOutput();
-    backlightOn();
     showIntroScreen();
     resetInput();
 
     previousTimePot = 0;
   }
 
-  long dt = getCurrentTimeInState();
+  unsigned long dt = getCurrentTimeInState();
 
   if (dt > MAX_TIME_IN_INTRO_STATE){
     changeState(SLEEP_STATE);
@@ -64,7 +69,13 @@ void intro(){
     
     previousTimePot = dt;
     int sensorValue = getSensorValue();
-    int choice = map(sensorValue, 0, 1024, 1, 5);
+    int choice = map(
+      sensorValue, 
+      MIN_POT_VALUE, 
+      MAX_POT_VALUE, 
+      MINIMUM_DIFFICULTY, 
+      MAXIMUM_DIFFICULTY
+    );
     char difficulty;
     reductionFactor = REDUCTION_MULTIPLIER*choice;
 
@@ -80,6 +91,9 @@ void intro(){
         break;
       case SUPER:
         difficulty = 'S';
+        break;
+      default:
+        difficulty = 'E';
         break;
     }
 
@@ -122,7 +136,7 @@ void start(){
     resetPoint();
   }
 
-  long dt = getCurrentTimeInState();
+  unsigned long dt = getCurrentTimeInState();
 
   if (dt > DELAY_BEFORE_GAME){
     changeState(INGAME_STATE);
@@ -131,19 +145,14 @@ void start(){
 
 void ingame() {
   if (isJustEnteredInState()) {
+    Serial.println("In Game...");
     waitTime = random(0, MAX_WAIT + 1);
     gamestarted = false;
     resetInput();
     resetOutput();
   }
 
-  long dt = getCurrentTimeInState();
-
-  if (!gamestarted && dt > waitTime) {
-    gamestarted = true;
-    N = random(1, 4);
-    printValue(N);
-  }
+  unsigned long dt = getCurrentTimeInState();
 
   for (int i = 0; i < NUM_PLAYERS; i++) {
     int presses = getNumberOfPress(i);
@@ -163,10 +172,20 @@ void ingame() {
     resetOutput();
     changePoint(i, value);
     changeLedState(i, value, HIGH);
-    T1 -= reductionFactor;
-    if (T1 < T1_MIN) T1 = T1_MIN;
+    if (T1 > T1_MIN + reductionFactor) {
+      T1 -= reductionFactor;
+    } else {
+      T1 = T1_MIN;
+    }
     return;
   }
+
+  if (!gamestarted && dt > waitTime) {
+    gamestarted = true;
+    N = random(1, 4);
+    printValue(N);
+  }
+
 
   if (dt > (waitTime + T1) && gamestarted) {
       changeState(GAMEOVER_STATE);
@@ -179,7 +198,7 @@ void result() {
     showResultScreen(getPoint(P1), getPoint(P2));
   }
 
-  long dt = getCurrentTimeInState();
+  unsigned long dt = getCurrentTimeInState();
 
   if (dt > DELAY_BEFORE_NEW_ROUND) {
     changeState(INGAME_STATE);
@@ -213,7 +232,7 @@ void gameOver(){
     rotateCharOnScreen(getGameMessage(GAMEOVER_WINNER_STR));
   }
 
-  long dt = getCurrentTimeInState();
+  unsigned long dt = getCurrentTimeInState();
   if (dt > DELAY_BEFORE_RESTART) {
     changeState(INTRO_STATE);
     endStringSet = false; 

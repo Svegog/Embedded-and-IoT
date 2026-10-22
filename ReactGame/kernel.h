@@ -9,7 +9,7 @@ void updateStateTime();
 void changeState(int new_state);
 
 int getCurrentState();
-long getCurrentTimeInState();
+unsigned long getCurrentTimeInState();
 bool isJustEnteredInState();
 
 #endif

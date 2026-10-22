@@ -1,9 +1,8 @@
-#include "input.h"
-#include "Arduino.h"
-#include "config.h"
-#include "kernel.h"
-
 #include <EnableInterrupt.h>
+
+#include "Arduino.h"
+#include "input.h"
+#include "config.h"
 
 #define BOUNCING_TIME 40 // both HIGH and LOW state
 
@@ -45,7 +44,7 @@ void initInput(){
 }
 
 void resetInput(){
-  long ts = millis();
+  unsigned long ts = millis();
   noInterrupts();
   for (int i = 0; i < NUM_BUTTONS; i++) {
     buttonPressed[i] = false;
