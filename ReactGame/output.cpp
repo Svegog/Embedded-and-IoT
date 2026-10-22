@@ -41,7 +41,7 @@ uint8_t outputPins[NUM_LEDS] = {
 
 void initOutput(){
   int status = getCurrentState();
-
+ 
   if (status == INTRO_STATE) {
     for (int i = 0; i < NUM_LEDS; i++) {
       pinMode(outputPins[i], OUTPUT);     
@@ -52,13 +52,10 @@ void initOutput(){
     lcd.print("React!");
 
   } else if (status == START_STATE) {
-
     lcd.setCursor(7, 0);
     lcd.print("Go!");
-
   } else if (status == RESULT_STATE) {
-
-    lcd.setCursor(3, 0); // hard coded, need fix
+    lcd.setCursor(3, 0);
     lcd.print("P1");
     lcd.setCursor(3, 1);
     lcd.print(getPoint(P1));
@@ -153,4 +150,9 @@ const char* getGameMessage(MessageType type) {
 void updateWinnerString(int winner) {
   strings[WINNER_STRING_INDEX][26] = 'P';
   strings[WINNER_STRING_INDEX][27] = '0' + winner;
+}
+
+void printLevelDifficulty(char choice) {
+  lcd.setCursor(15, 1);
+  lcd.print(choice);
 }

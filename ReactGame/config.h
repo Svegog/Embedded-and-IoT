@@ -16,4 +16,6 @@
 #define P2_RED_LED_PIN 6
 #define P2_GREEN_LED_PIN 8
 
+#define POTENT_PIN A0
+
 #endif

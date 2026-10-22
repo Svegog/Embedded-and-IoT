@@ -62,14 +62,6 @@ bool isButtonPressed(int buttonIndex){
   return buttonPressed[buttonIndex];
 }
 
-bool isAtLeastOneButtonPressed() {
-  bool result = false;
-  for (int i = 0; i < NUM_BUTTONS; i++) {
-    result = result || isButtonPressed(i);
-  }
-  return result;
-}
-
 bool allButtonPressed() {
   bool result = true;
   for (int i = 0; i < NUM_BUTTONS; i++) {
@@ -118,6 +110,10 @@ void resetPoint() {
 
 int getPoint(int player) {
   return points[player];
+}
+
+int getSensorValue() {
+  return analogRead(POTENT_PIN);
 }
 
 

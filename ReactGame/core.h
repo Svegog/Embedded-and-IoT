@@ -1,6 +1,11 @@
 #ifndef __CORE__
 #define __CORE__
 
+#define EASY 1
+#define MEDIUM 2
+#define HARD 3
+#define SUPER 4
+
 #define INTRO_STATE   1
 #define START_STATE  2
 #define SLEEP_STATE  3

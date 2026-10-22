@@ -14,7 +14,10 @@
 #define T1_INITIAL 5000
 #define T1_MIN 500
 
-#define MAX_TIME_IN_INTRO_STATE 10000
+#define POTENTIOMETER_DELAY 50
+#define REDUCTION_MULTIPLIER 50
+
+#define MAX_TIME_IN_INTRO_STATE 15000 // more time to choose difficulty
 #define DELAY_BEFORE_GAME 3000
 #define MAX_WAIT 5000
 #define DELAY_BEFORE_NEW_ROUND 4000
@@ -23,23 +26,35 @@
 
 bool gamestarted = false;
 bool endStringSet = false;
+
 long T1 = T1_INITIAL;
 long waitTime;
 long reductionFactor;
 int N;
 
+char difficulty;
+long previousTimePot = 0;
+
+long timeCount = 0;
+
 /* core business logic */
 
 void initCore(){
   Serial.begin(9600);
-  randomSeed(analogRead(A0));
-  reductionFactor = 0; // TODO: turn the potentiometer, show on screen the difficulty, do a 2 second delay for choosing the game complexity
-  Serial.println("BOOT"); // check if the boot fails
+  randomSeed(analogRead(POTENT_PIN));
+  reductionFactor = 0;
+  Serial.println("BOOT");
 }
 
 void intro(){
   if (isJustEnteredInState()){
     Serial.println("Intro...");
+    Serial.println("Choose difficulty:");
+    Serial.println("E for easy");
+    Serial.println("M for medium");
+    Serial.println("H for hard");
+    Serial.println("S for superhard");
+  
     initOutput();
     resetInput();
   }
@@ -53,6 +68,31 @@ void intro(){
 
   rotateCharOnScreen(getGameMessage(WELCOME_STR));
   fadeLed();
+  
+  if (dt - previousTimePot > POTENTIOMETER_DELAY) {
+    
+    previousTimePot = dt;
+    int sensorValue = getSensorValue();
+    int choice = map(sensorValue, 0, 1024, 1, 5);
+    reductionFactor = REDUCTION_MULTIPLIER*choice;
+
+    switch (choice) {
+      case EASY:
+        difficulty = 'E';
+        break;
+      case MEDIUM:
+        difficulty = 'M';
+        break;
+      case HARD:
+        difficulty = 'H';
+        break;
+      case SUPER:
+        difficulty = 'S';
+        break;
+    }
+
+    printLevelDifficulty(difficulty);
+  }
   
   if (allButtonPressed()) {
     changeState(START_STATE);
@@ -185,7 +225,6 @@ void gameOver(){
   }
 
   long dt = getCurrentTimeInState();
-
   if (dt > DELAY_BEFORE_RESTART) {
     changeState(INTRO_STATE);
     endStringSet = false; 
