@@ -3,6 +3,7 @@
 #include "kernel.h"
 #include "input.h"
 #include "output.h"
+#include "score.h"
 #include "config.h"
 
 #include <avr/sleep.h>
@@ -16,12 +17,18 @@ long waitTime;
 long reductionFactor;
 int N;
 
-char difficulty;
-long previousTimePot = 0;
+long previousTimePot;
 
-long timeCount = 0;
-
-/* core business logic */
+void printStartSection() {
+  Serial.println("Choose difficulty with potentiometer");
+  Serial.println("A letter will be print on screen");
+  Serial.println("----------------------------------------------");
+  Serial.println("E for easy");
+  Serial.println("M for medium");
+  Serial.println("H for hard");
+  Serial.println("S for superhard");
+  Serial.println("----------------------------------------------");
+}
 
 void initCore(){
   Serial.begin(9600);
@@ -33,14 +40,14 @@ void initCore(){
 void intro(){
   if (isJustEnteredInState()){
     Serial.println("Intro...");
-    Serial.println("Choose difficulty:");
-    Serial.println("E for easy");
-    Serial.println("M for medium");
-    Serial.println("H for hard");
-    Serial.println("S for superhard");
+    printStartSection();
   
+    initOutput();
+    backlightOn();
     showIntroScreen();
     resetInput();
+
+    previousTimePot = 0;
   }
 
   long dt = getCurrentTimeInState();
@@ -58,6 +65,7 @@ void intro(){
     previousTimePot = dt;
     int sensorValue = getSensorValue();
     int choice = map(sensorValue, 0, 1024, 1, 5);
+    char difficulty;
     reductionFactor = REDUCTION_MULTIPLIER*choice;
 
     switch (choice) {
@@ -100,8 +108,6 @@ void sleep(){
   sleep_disable(); // after interrupt 
   power_all_enable();
 
-  initOutput();
-
   // change the state after the interrupt
   changeState(INTRO_STATE);         
 }
@@ -111,7 +117,7 @@ void start(){
     Serial.println("Start...");
     T1 = T1_INITIAL;
     resetOutput();
-    initOutput();
+    showStartScreen();
     resetInput();
     resetPoint();
   }
@@ -136,7 +142,6 @@ void ingame() {
   if (!gamestarted && dt > waitTime) {
     gamestarted = true;
     N = random(1, 4);
-    initOutput();
     printValue(N);
   }
 
@@ -171,7 +176,7 @@ void ingame() {
 void result() {
   if (isJustEnteredInState()){
     Serial.println("Result...");
-    initOutput();
+    showResultScreen(getPoint(P1), getPoint(P2));
   }
 
   long dt = getCurrentTimeInState();
@@ -185,7 +190,7 @@ void gameOver(){
   if (isJustEnteredInState()){
     Serial.println("Finalize...");
     resetOutput();
-    initOutput();
+    backlightOn();
     for (int i = 0; i < NUM_PLAYERS; i++) {
       changeLedState(i, PENALTY, HIGH);
     }
@@ -194,7 +199,7 @@ void gameOver(){
   if (getCurrentTimeInState() > DELAY_GAME_OVER) {
     for (int i = 0; i < NUM_PLAYERS; i++) {
       changeLedState(i, PENALTY, LOW);
-    };
+    }
   }
 
   if (isTie()) {

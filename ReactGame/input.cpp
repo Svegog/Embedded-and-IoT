@@ -5,9 +5,10 @@
 
 #include <EnableInterrupt.h>
 
+#define BOUNCING_TIME 40 // both HIGH and LOW state
+
 uint8_t inputPins[NUM_BUTTONS] = {P1_BUT_PIN, P2_BUT_PIN};
 volatile int numberOfPress[NUM_PLAYERS];
-int points[NUM_PLAYERS];
 volatile bool buttonPressed[NUM_BUTTONS] = {false, false};
 
 /* used for debouncing */
@@ -71,41 +72,6 @@ int getNumberOfPress(int player){
   int n = numberOfPress[player];
   interrupts();
   return n;
-}
-
-void changePoint(int player, int point) {
-  points[player] += point;
-}
-
-// we NEED at least two player, fair enough because this is not a single player game lol
-bool isTie() {
-  int startValue = points[0];
-  for (int i = 1; i < NUM_PLAYERS; i++) {
-    if (startValue != points[i]) return false;
-  }
-  return true;
-}
-
-int getWinner() {
-  int resultIndex = 0;
-  int max = points[0];
-  for (int i = 1; i < NUM_PLAYERS; i++) {
-    if (points[i] > max) {
-      max = points[i];
-      resultIndex = i;
-    }
-  }
-  return resultIndex + 1; 
-}
-
-void resetPoint() {
-  for (int i = 0; i < NUM_PLAYERS; i++) {
-    points[i] = 0;
-  }
-}
-
-int getPoint(int player) {
-  return points[player];
 }
 
 int getSensorValue() {

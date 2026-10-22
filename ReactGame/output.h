@@ -1,9 +1,6 @@
 #ifndef __OUTPUT__
 #define __OUTPUT__
 
-#define WINNER_STRING_INDEX 2
-#define MAX_CHAR_ON_SCREEN 16
-
 enum MessageType {
   WELCOME_STR = 0,
   GAMEOVER_TIE_STR = 1,
@@ -11,8 +8,10 @@ enum MessageType {
 };
 
 void initOutput();
+void backlightOn();
 void showIntroScreen();
 void showStartScreen();
+void showResultScreen(int p1, int p2);
 
 void resetOutput();
 void rotateCharOnScreen(const char* str);

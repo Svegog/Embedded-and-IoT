@@ -3,8 +3,8 @@
 /* current state */
 int currentState;
 
-/* time in which the game entered in current state */
-long enteredStateTime;
+/* time registered when entering the new state */
+long enteredStateTime
 
 /* how long it the game is in current state */
 long currentTimeInState;
@@ -22,10 +22,6 @@ long getCurrentTimeInState(){
   return currentTimeInState;
 }
 
-long getEnteredStateTime(){
-  return enteredStateTime;
-}
-
 bool isJustEnteredInState(){
   bool com = firstCheckInState;
   firstCheckInState = false;
@@ -41,11 +37,3 @@ void changeState(int new_state){
 void updateStateTime(){
   currentTimeInState = millis() - enteredStateTime;
 }
-
-/*
-void logMsg(const String& msg){
-  #ifdef __DEBUG__
-  Serial.println(msg);
-  #endif
-}
-*/

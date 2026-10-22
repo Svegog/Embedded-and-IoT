@@ -1,18 +1,11 @@
 #ifndef __INPUT__
 #define __INPUT__
 
-#define BOUNCING_TIME 40 // both HIGH and LOW state
-
 void initInput();
 void resetInput();
 bool isButtonPressed(int buttonIndex);
 bool allButtonPressed();
 int getNumberOfPress(int player);
-void changePoint(int player, int point);
-bool isTie();
-int getWinner();
-void resetPoint();
-int getPoint(int player);
 int getSensorValue();
  
 #endif

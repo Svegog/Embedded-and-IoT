@@ -1,11 +1,11 @@
 #include "Arduino.h"
 #include "output.h"
-#include "input.h"
 #include "config.h"
-#include "kernel.h"
-#include "core.h"
 
 #include <LiquidCrystal_I2C.h>
+
+#define WINNER_STRING_INDEX 2
+#define MAX_CHAR_ON_SCREEN 16
 
 const long intervalLCD = 200;
 const long intervalLED = 30;
@@ -36,34 +36,40 @@ uint8_t outputPins[NUM_LEDS] = {
   P2_GREEN_LED_PIN
 }; // odd are always green
 
-void showIntroScreen() {
+void initOutput() {
   for (int i = 0; i < NUM_LEDS; i++) {
     pinMode(outputPins[i], OUTPUT);     
   }
+}
 
+void showIntroScreen() {
   lcd.init();
   lcd.setCursor(5, 1);
   lcd.print("React!");
+  backlightOn();
 }
 
 void showStartScreen() {
+  backlightOn();
   lcd.setCursor(7, 0);
   lcd.print("Go!");
 }
 
-void showResultScreen() {
-      lcd.setCursor(3, 0);
-    lcd.print("P1");
-    lcd.setCursor(3, 1);
-    lcd.print(getPoint(P1));
+void showResultScreen(int player1, int player2) {
+  backlightOn();
 
-    lcd.setCursor(11, 0);
-    lcd.print("P2");
-    lcd.setCursor(11, 1);
-    lcd.print(getPoint(P2));
+  lcd.setCursor(3, 0);
+  lcd.print("P1");
+  lcd.setCursor(3, 1);
+  lcd.print(player1);
+
+  lcd.setCursor(11, 0);
+  lcd.print("P2");
+  lcd.setCursor(11, 1);
+  lcd.print(player2);
 }
 
-void initOutput() {
+void backlightOn() {
   lcd.backlight();
 }
 
@@ -110,8 +116,8 @@ void fadeLed() {
   if (currentTimeLED - previousTimeLED >= intervalLED) {
     previousTimeLED = currentTimeLED;
 
-    analogWrite(P1_RED_LED_PIN, brightness1);
-    analogWrite(P2_RED_LED_PIN, brightness2);
+    analogWrite(getRedLed(P1), brightness1);
+    analogWrite(getRedLed(P2), brightness2);
   
     brightness1 += fadeAmount;
     brightness2 -= fadeAmount;
@@ -123,6 +129,7 @@ void fadeLed() {
 }
 
 void printValue(int N) {
+  backlightOn();
   lcd.setCursor(8, 0);
   lcd.print(N);
 }
