@@ -7,9 +7,6 @@
 
 #include <LiquidCrystal_I2C.h>
 
-#define WINNER_STRING_INDEX 2
-#define MAX_CHAR_ON_SCREEN 16
-
 const long intervalLCD = 200;
 const long intervalLED = 30;
 
@@ -39,23 +36,23 @@ uint8_t outputPins[NUM_LEDS] = {
   P2_GREEN_LED_PIN
 }; // odd are always green
 
-void initOutput(){
-  int status = getCurrentState();
- 
-  if (status == INTRO_STATE) {
-    for (int i = 0; i < NUM_LEDS; i++) {
-      pinMode(outputPins[i], OUTPUT);     
-    }
+void showIntroScreen() {
+  for (int i = 0; i < NUM_LEDS; i++) {
+    pinMode(outputPins[i], OUTPUT);     
+  }
 
-    lcd.init();
-    lcd.setCursor(5, 1);
-    lcd.print("React!");
+  lcd.init();
+  lcd.setCursor(5, 1);
+  lcd.print("React!");
+}
 
-  } else if (status == START_STATE) {
-    lcd.setCursor(7, 0);
-    lcd.print("Go!");
-  } else if (status == RESULT_STATE) {
-    lcd.setCursor(3, 0);
+void showStartScreen() {
+  lcd.setCursor(7, 0);
+  lcd.print("Go!");
+}
+
+void showResultScreen() {
+      lcd.setCursor(3, 0);
     lcd.print("P1");
     lcd.setCursor(3, 1);
     lcd.print(getPoint(P1));
@@ -64,8 +61,9 @@ void initOutput(){
     lcd.print("P2");
     lcd.setCursor(11, 1);
     lcd.print(getPoint(P2));
-  }
+}
 
+void initOutput() {
   lcd.backlight();
 }
 

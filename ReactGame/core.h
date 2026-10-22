@@ -13,6 +13,22 @@
 #define RESULT_STATE 5
 #define GAMEOVER_STATE 6 
 
+#define POINT 1
+#define PENALTY -1
+
+#define T1_INITIAL 5000
+#define T1_MIN 500
+
+#define POTENTIOMETER_DELAY 50
+#define REDUCTION_MULTIPLIER 50
+
+#define MAX_TIME_IN_INTRO_STATE 15000 // more time to choose difficulty
+#define DELAY_BEFORE_GAME 3000
+#define MAX_WAIT 5000
+#define DELAY_BEFORE_NEW_ROUND 4000
+#define DELAY_GAME_OVER 2000
+#define DELAY_BEFORE_RESTART 5000
+
 /* core business logic  */
 
 void initCore();

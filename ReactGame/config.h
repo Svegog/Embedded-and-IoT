@@ -1,6 +1,8 @@
 #ifndef __CONFIG__
 #define __CONFIG__
 
+// HARDWARE AND GAME CONFIG
+
 #define P1 0
 #define P2 1
 

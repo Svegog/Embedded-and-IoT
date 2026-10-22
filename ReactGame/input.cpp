@@ -5,10 +5,6 @@
 
 #include <EnableInterrupt.h>
 
-#define BOUNCING_TIME 40 // both HIGH and LOW state
-
-// #define __DEBUG__
-
 uint8_t inputPins[NUM_BUTTONS] = {P1_BUT_PIN, P2_BUT_PIN};
 volatile int numberOfPress[NUM_PLAYERS];
 int points[NUM_PLAYERS];
