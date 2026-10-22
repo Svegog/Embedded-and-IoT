@@ -33,7 +33,7 @@ int N;
 void initCore(){
   Serial.begin(9600);
   randomSeed(analogRead(A0));
-  reductionFactor = 0; // TODO
+  reductionFactor = 0; // TODO: turn the potentiometer, show on screen the difficulty, do a 2 second delay for choosing the game complexity
   Serial.println("BOOT"); // check if the boot fails
 }
 
@@ -185,6 +185,7 @@ void gameOver(){
   }
 
   long dt = getCurrentTimeInState();
+
   if (dt > DELAY_BEFORE_RESTART) {
     changeState(INTRO_STATE);
     endStringSet = false; 
