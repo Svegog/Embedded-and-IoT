@@ -48,9 +48,9 @@ void intro(){
     Serial.println("Intro...");
     printStartSection();
   
-    initOutput();
+    initOutput();  // TODO: Da spostare in initCore o in setup del superloop
     showIntroScreen();
-    resetInput();
+    resetInput();  // ?? E VERAMENTE NECESSARIO ???
 
     previousTimePot = 0;
   }
@@ -132,7 +132,7 @@ void start(){
     T1 = T1_INITIAL;
     resetOutput();
     showStartScreen();
-    resetInput();
+    resetInput();  // SUPERFLUO ???
     resetPoint();
   }
 
@@ -143,17 +143,19 @@ void start(){
   }
 }
 
+/* TODO: Bisogna inserire un timeout quando uno arriva al numero giusto per vedere se preme troppe volte */
 void ingame() {
   if (isJustEnteredInState()) {
     Serial.println("In Game...");
     waitTime = random(0, MAX_WAIT + 1);
     gamestarted = false;
-    resetInput();
+    resetInput(); // RIDONDANTE CON START ????
     resetOutput();
   }
 
   unsigned long dt = getCurrentTimeInState();
 
+  /* NON MI PIACE IL CONTINUE */
   for (int i = 0; i < NUM_PLAYERS; i++) {
     int presses = getNumberOfPress(i);
     if (presses == 0) continue;

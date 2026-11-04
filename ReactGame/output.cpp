@@ -84,7 +84,7 @@ void resetOutput() {
   lcd.noBacklight();  
 }
 
-void rotateCharOnScreen(const char* str) {
+void rotateCharOnScreen(const char* str) {  // TODO: DA METTERE COME PARAMETRO IL MessageType E INCAPSULARE LA SCELTA DELLA STRINGA
   currentTimeLCD = millis();
 
   if (currentTimeLCD - previousTimeLCD < intervalLCD) {
@@ -113,6 +113,7 @@ void rotateCharOnScreen(const char* str) {
   pos = (pos + 1) % len;
 }
 
+/* TODO: Si puo usare una sola variabile brightness calcolando la luminosita del led complementare con 255 - brigtness */
 void fadeLed() {
   currentTimeLED = millis(); 
 
