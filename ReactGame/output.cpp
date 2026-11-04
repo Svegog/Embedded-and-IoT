@@ -7,13 +7,19 @@
 
 #define WINNER_STRING_INDEX 2
 #define MAX_CHAR_ON_SCREEN 16
+#define NUMBER_OF_ROWS 2
+#define LCD_ADDRESS 0x27
 #define FIRST_POSITION_TO_MODIFY 26
 #define SECOND_POSITION_TO_MODIFY 27
 
 const long intervalLCD = 200;
 const long intervalLED = 30;
 
-LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,16,2);
+LiquidCrystal_I2C lcd = LiquidCrystal_I2C(
+    LCD_ADDRESS, 
+    MAX_CHAR_ON_SCREEN, 
+    NUMBER_OF_ROWS
+);
 
 char strings[3][52] = { // hardcoded because message are fixed
   "Welcome to the React! Game. Press Buttons to Start ",
@@ -135,7 +141,7 @@ void printValue(int N) {
   backlightOn();
   lcd.setCursor(8, 0);
   lcd.print(N);
-}
+}0x27
 
 int getGreenLed(int player) {
   return outputPins[player*2 + 1];
@@ -160,7 +166,27 @@ void updateWinnerString(int winner) {
   strings[WINNER_STRING_INDEX][SECOND_POSITION_TO_MODIFY] = '0' + winner;
 }
 
-void printLevelDifficulty(char choice) {
+void printLevelDifficulty(int choice) {
+  char difficulty;
+
+  switch (choice) {
+    case EASY:
+      difficulty = 'E';
+      break;
+    case MEDIUM:
+      difficulty = 'M';
+      break;
+    case HARD:
+      difficulty = 'H';
+      break;
+    case SUPER:
+      difficulty = 'S';
+      break;
+    default:
+      difficulty = 'E';
+      break;
+  }  
+
   lcd.setCursor(15, 1);
-  lcd.print(choice);
+  lcd.print(difficulty);
 }

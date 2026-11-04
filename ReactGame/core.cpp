@@ -76,28 +76,9 @@ void intro(){
       MINIMUM_DIFFICULTY, 
       MAXIMUM_DIFFICULTY
     );
-    char difficulty;
     reductionFactor = REDUCTION_MULTIPLIER*choice;
 
-    switch (choice) {
-      case EASY:
-        difficulty = 'E';
-        break;
-      case MEDIUM:
-        difficulty = 'M';
-        break;
-      case HARD:
-        difficulty = 'H';
-        break;
-      case SUPER:
-        difficulty = 'S';
-        break;
-      default:
-        difficulty = 'E';
-        break;
-    }
-
-    printLevelDifficulty(difficulty);
+    printLevelDifficulty(choice);
   }
   
   if (allButtonPressed()) {
@@ -172,6 +153,7 @@ void ingame() {
     resetOutput();
     changePoint(i, value);
     changeLedState(i, value, HIGH);
+
     if (T1 > T1_MIN + reductionFactor) {
       T1 -= reductionFactor;
     } else {
