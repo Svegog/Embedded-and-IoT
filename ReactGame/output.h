@@ -22,6 +22,6 @@ int getRedLed(int player);
 void changeLedState(int player, int point, int state);
 const char* getGameMessage(MessageType type);
 void updateWinnerString(int winner);
-void printLevelDifficulty(char choice);
+void printLevelDifficulty(int choice);
  
 #endif
