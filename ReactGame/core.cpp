@@ -159,7 +159,7 @@ void ingame() {
     if (presses == 0) continue;
 
     int value;
-    if (!gamestarted || presses > N) {
+    if (!gamestarted) {
       value = PENALTY;
     } else if (presses == N) {
       value = POINT;
