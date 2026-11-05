@@ -25,6 +25,9 @@ int N;
 
 unsigned long previousTimePot;
 
+unsigned long pressTimestamp;
+int roundScores[NUM_PLAYERS];
+
 void printStartSection() {
   Serial.println("Choose difficulty with potentiometer");
   Serial.println("----------------------------------------------");
@@ -124,44 +127,31 @@ void start(){
   }
 }
 
-/* TODO: Bisogna inserire un timeout quando uno arriva al numero giusto per vedere se preme troppe volte */
 void ingame() {
   if (isJustEnteredInState()) {
     Serial.println("In Game...");
     waitTime = random(0, MAX_WAIT + 1);
     gamestarted = false;
+    roundWon = false;
+    for (int i = 0; i < NUM_PLAYERS; i++) {
+      roundScores[i] = 0;
+    }
     resetInput(); // RIDONDANTE CON START ????
     resetOutput();
   }
 
   unsigned long dt = getCurrentTimeInState();
 
-  /* NON MI PIACE IL CONTINUE */
   for (int i = 0; i < NUM_PLAYERS; i++) {
+    unsigned long ts = millis();
     int presses = getNumberOfPress(i);
     if (presses == 0) continue;
 
-    int value;
     if (!gamestarted) {
-      value = PENALTY;
+      roundScores[i] = PENALTY;
     } else if (presses == N) {
-      value = POINT;
-    } else {
-      continue;
+      pressTimestamp[i] = ts;
     }
-
-    changeState(RESULT_STATE);
-    resetInput();
-    resetOutput();
-    changePoint(i, value);
-    changeLedState(i, value, HIGH);
-
-    if (T1 > T1_MIN + reductionFactor) {
-      T1 -= reductionFactor;
-    } else {
-      T1 = T1_MIN;
-    }
-    return;
   }
 
   if (!gamestarted && dt > waitTime) {
@@ -172,7 +162,43 @@ void ingame() {
 
 
   if (dt > (waitTime + T1) && gamestarted) {
+
+    changeState(RESULT_STATE);
+    resetOutput();
+    int numberOfPresses[NUM_PLAYERS];
+    for (int i = 0; i < NUM_PLAYERS; i++) {
+      int numberOfPresses[i] = getNumberOfPress(i);
+      if (numberOfPresses[i] == N && roundScores[i] != PENALTY) {
+        roundScores[i] = POINT;
+      } else if (numberOfPresses[i] > N) {
+        roundScores[i] = PENALTY;
+      }
+    }
+
+    if (roundScores[0] == POINT && roundScores[1] == POINT) {
+      if (pressTimestamp[0] < pressTimestamp[1]) {
+        roundScores[1] = 0;
+      } else {
+        roundScores[0] = 0;
+      }
+    }
+
+
+    changePoint(roundScores);
+    for (int i = 0; i < NUM_PLAYERS; i++){
+      changeLedState(i, roundScores[i], HIGH);
+    }
+
+    if (T1 > T1_MIN + reductionFactor) {
+      T1 -= reductionFactor;
+    } else {
+      T1 = T1_MIN;
+    }
+
+    if (getNumberOfPress(1) == 0 && getNumberOfPress(2) == 0) {
       changeState(GAMEOVER_STATE);
+    }
+    resetInput();
   }
 }
 

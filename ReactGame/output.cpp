@@ -153,6 +153,9 @@ int getRedLed(int player) {
 }
 
 void changeLedState(int player, int point, int state) {
+  if (point == 0) {
+    return;
+  }
   int value = (state > 0) ? HIGH : LOW;
   int pin = (point > 0) ? getGreenLed(player) : getRedLed(player);
   digitalWrite(pin, value);

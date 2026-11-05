@@ -9,8 +9,10 @@ void resetPoint() {
   }
 }
 
-void changePoint(int player, int point) {
-  points[player] += point;
+void changePoint(int scores[NUM_PLAYERS]) {
+  for (int i = 0; i < NUM_PLAYERS; i++) {
+    points[i] += scores[i];
+  }
 }
 
 int getPoint(int player) {

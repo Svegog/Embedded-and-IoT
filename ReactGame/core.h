@@ -11,7 +11,7 @@
 #define SLEEP_STATE  3
 #define INGAME_STATE   4
 #define RESULT_STATE 5
-#define GAMEOVER_STATE 6 
+#define GAMEOVER_STATE 6
 
 /* core business logic  */
 
