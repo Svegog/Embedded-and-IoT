@@ -25,7 +25,7 @@ int N;
 
 unsigned long previousTimePot;
 
-unsigned long pressTimestamp;
+unsigned long pressTimestamp[NUM_PLAYERS];
 int roundScores[NUM_PLAYERS];
 
 void printStartSection() {
@@ -170,6 +170,7 @@ void ingame() {
       int numberOfPresses[i] = getNumberOfPress(i);
       if (numberOfPresses[i] == N && roundScores[i] != PENALTY) {
         roundScores[i] = POINT;
+        pressTimestamp[i] = millis();
       } else if (numberOfPresses[i] > N) {
         roundScores[i] = PENALTY;
       }
