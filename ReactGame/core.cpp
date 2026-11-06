@@ -195,7 +195,7 @@ void ingame() {
       T1 = T1_MIN;
     }
 
-    if (getNumberOfPress(1) == 0 && getNumberOfPress(2) == 0) {
+    if (numberOfPresses[0] == 0 && numberOfPresses[1] == 0) {
       changeState(GAMEOVER_STATE);
     }
     resetInput();
