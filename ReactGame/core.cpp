@@ -132,9 +132,9 @@ void ingame() {
     Serial.println("In Game...");
     waitTime = random(0, MAX_WAIT + 1);
     gamestarted = false;
-    roundWon = false;
     for (int i = 0; i < NUM_PLAYERS; i++) {
       roundScores[i] = 0;
+      pressTimestamp[i] = 0;
     }
     resetInput(); // RIDONDANTE CON START ????
     resetOutput();
@@ -149,7 +149,7 @@ void ingame() {
 
     if (!gamestarted) {
       roundScores[i] = PENALTY;
-    } else if (presses == N) {
+    } else if (presses == N && pressTimestamp[i] == 0) {
       pressTimestamp[i] = ts;
     }
   }
@@ -167,10 +167,9 @@ void ingame() {
     resetOutput();
     int numberOfPresses[NUM_PLAYERS];
     for (int i = 0; i < NUM_PLAYERS; i++) {
-      int numberOfPresses[i] = getNumberOfPress(i);
+      numberOfPresses[i] = getNumberOfPress(i);
       if (numberOfPresses[i] == N && roundScores[i] != PENALTY) {
         roundScores[i] = POINT;
-        pressTimestamp[i] = millis();
       } else if (numberOfPresses[i] > N) {
         roundScores[i] = PENALTY;
       }

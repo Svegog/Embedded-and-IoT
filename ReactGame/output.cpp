@@ -3,6 +3,7 @@
 #include "Arduino.h"
 #include "output.h"
 #include "config.h"
+#include "core.h"
 
 
 #define WINNER_STRING_INDEX 2
@@ -142,7 +143,7 @@ void printValue(int N) {
   backlightOn();
   lcd.setCursor(8, 0);
   lcd.print(N);
-}0x27
+}
 
 int getGreenLed(int player) {
   return outputPins[player*2 + 1];
