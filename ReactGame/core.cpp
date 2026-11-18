@@ -151,6 +151,7 @@ void ingame() {
 
   if (!gamestarted && dt > waitTime) {
     gamestarted = true;
+    resetInput();
     N = random(1, 4);
     printValue(N);
   }
