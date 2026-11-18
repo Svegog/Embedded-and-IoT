@@ -15,6 +15,7 @@ void showResultScreen(int p1, int p2);
 
 void resetOutput();
 void rotateCharOnScreen(const char* str);
+void rotateMessage(MessageType type);
 void fadeLed();
 void printValue(int N);
 int getGreenLed(int player);

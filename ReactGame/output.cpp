@@ -166,6 +166,10 @@ const char* getGameMessage(MessageType type) {
   return strings[type];
 }
 
+void rotateMessage(MessageType type) {
+  rotateCharOnScreen(getGameMessage(type));
+}
+
 void updateWinnerString(int winner) {
   strings[WINNER_STRING_INDEX][FIRST_POSITION_TO_MODIFY] = 'P';
   strings[WINNER_STRING_INDEX][SECOND_POSITION_TO_MODIFY] = '0' + winner;

@@ -65,7 +65,7 @@ void intro(){
     return;
   }
 
-  rotateCharOnScreen(getGameMessage(WELCOME_STR));
+  rotateMessage(WELCOME_STR);
   fadeLed();
   
   if (dt - previousTimePot > POTENTIOMETER_DELAY) {
@@ -232,14 +232,14 @@ void gameOver(){
   }
 
   if (isTie()) {
-    rotateCharOnScreen(getGameMessage(GAMEOVER_TIE_STR));
+    rotateMessage(GAMEOVER_TIE_STR);
   } else {
     if (!endStringSet) {
       int winner = getWinner();
       updateWinnerString(winner);
       endStringSet = true;
     }
-    rotateCharOnScreen(getGameMessage(GAMEOVER_WINNER_STR));
+    rotateMessage(GAMEOVER_WINNER_STR);
   }
 
   unsigned long dt = getCurrentTimeInState();
