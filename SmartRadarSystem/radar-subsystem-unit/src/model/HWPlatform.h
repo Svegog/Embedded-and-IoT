@@ -27,15 +27,15 @@ public:
   Potentiometer* getPotentiometer();
 
 private:
-  Button* startButton;
-  Button* stopButton;
-  Button* resetButton;
-  Led* workingLed;
-  Led* alarmLed;
-  ServoMotor* servo;
-  Sonar* sonar;
-  TempSensor* tempSensor;
-  Potentiometer* potentiometer;
+  Button* pStartButton;
+  Button* pStopButton;
+  Button* pResetButton;
+  Led* pWorkingLed;
+  Led* pAlarmLed;
+  ServoMotor* pServo;
+  Sonar* pSonar;
+  TempSensor* pTempSensor;
+  Potentiometer* pPotentiometer;
 };
 
 #endif

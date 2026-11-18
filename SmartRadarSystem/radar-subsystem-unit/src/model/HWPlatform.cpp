@@ -13,56 +13,56 @@
 void wakeUp(){}
 
 HWPlatform::HWPlatform(){
-  startButton = new ButtonImpl(START_PIN);
-  stopButton = new ButtonImpl(STOP_PIN);
-  resetButton = new ButtonImpl(RESET_PIN);
+  pStartButton = new ButtonImpl(START_PIN);
+  pStopButton = new ButtonImpl(STOP_PIN);
+  pResetButton = new ButtonImpl(RESET_PIN);
 
-  workingLed = new Led(WORKING_LED_PIN);
-  alarmLed = new Led(ALARM_LED_PIN);
+  pWorkingLed = new Led(WORKING_LED_PIN);
+  pAlarmLed = new Led(ALARM_LED_PIN);
 
-  potentiometer = new Potentiometer(POT_PIN);
-  servo = new ServoMotorImpl(SERVO_PIN);
-  sonar = new Sonar(ECHO_PIN, TRIG_PIN, 6000); // DA DEFINIRE, MAX TIME DIPENDE DA TEMPERATURA, DISTANZA E VELOCITA' SERVO
-  tempSensor = new TempSensorTMP36(TEMP_PIN);
+  pPotentiometer = new Potentiometer(POT_PIN);
+  pServo = new ServoMotorImpl(SERVO_PIN);
+  pSonar = new Sonar(ECHO_PIN, TRIG_PIN, 6000); // DA DEFINIRE, MAX TIME DIPENDE DA TEMPERATURA, DISTANZA E VELOCITA' SERVO
+  pTempSensor = new TempSensorTMP36(TEMP_PIN);
 }
 
 void HWPlatform::init(){
 }
 
 Button* HWPlatform::getStartButton(){
-  return this->startButton;
+  return this->pStartButton;
 }
 
 Button* HWPlatform::getStopButton(){
-  return this->stopButton;
+  return this->pStopButton;
 }
 
 Button* HWPlatform::getResetButton(){
-  return this->resetButton;
+  return this->pResetButton;
 }
 
 Led*  HWPlatform::getWorkingLed(){
-  return this->workingLed;
+  return this->pWorkingLed;
 }
 
 Led*  HWPlatform::getAlarmLed(){
-  return this->alarmLed;
+  return this->pAlarmLed;
 }
 
 ServoMotor* HWPlatform::getMotor(){
-  return this->servo;
+  return this->pServo;
 }
 
 Sonar* HWPlatform::getSonar(){
-  return this->sonar;
+  return this->pSonar;
 }
 
 TempSensor* HWPlatform::getTempSensor(){
-  return this->tempSensor;
+  return this->pTempSensor;
 }
 
 Potentiometer* HWPlatform::getPotentiometer() {
-  return this->potentiometer;
+  return this->pPotentiometer;
 }
 
 void HWPlatform::test(){
