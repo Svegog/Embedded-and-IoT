@@ -15,18 +15,18 @@
 #define MINIMUM_DIFFICULTY 1
 #define MAXIMUM_DIFFICULTY 5 // need to be 1 over the real maximum difficulty so the map function can also output value 4
 
-bool gamestarted = false;
-bool endStringSet = false;
+static bool gamestarted = false;
+static bool endStringSet = false;
 
-unsigned long T1 = T1_INITIAL;
-unsigned long waitTime;
-unsigned long reductionFactor;
-int N;
+static unsigned long T1 = T1_INITIAL;
+static unsigned long waitTime;
+static unsigned long reductionFactor;
+static int N;
 
-unsigned long previousTimePot;
+static unsigned long previousTimePot;
 
-unsigned long pressTimestamp[NUM_PLAYERS];
-int roundScores[NUM_PLAYERS];
+static unsigned long pressTimestamp[NUM_PLAYERS];
+static int roundScores[NUM_PLAYERS];
 
 void printStartSection() {
   Serial.println("Choose difficulty with potentiometer");
@@ -43,6 +43,7 @@ void initCore(){
   Serial.begin(BAUD_RATE);
   randomSeed(analogRead(SEED_PIN));
   reductionFactor = 0;
+  initOutput();
   Serial.println("Boot...");
 }
 
@@ -51,9 +52,8 @@ void intro(){
     Serial.println("Intro...");
     printStartSection();
   
-    initOutput();  // TODO: Da spostare in initCore o in setup del superloop
     showIntroScreen();
-    resetInput();  // ?? E VERAMENTE NECESSARIO ???
+    resetInput();
 
     previousTimePot = 0;
   }
@@ -116,7 +116,6 @@ void start(){
     T1 = T1_INITIAL;
     resetOutput();
     showStartScreen();
-    resetInput();  // SUPERFLUO ???
     resetPoint();
   }
 
@@ -135,7 +134,7 @@ void ingame() {
     for (int i = 0; i < NUM_PLAYERS; i++) {
       roundScores[i] = 0;
     }
-    resetInput(); // RIDONDANTE CON START ????
+    resetInput();
     resetOutput();
   }
 

@@ -13,33 +13,29 @@
 #define FIRST_POSITION_TO_MODIFY 26
 #define SECOND_POSITION_TO_MODIFY 27
 
-const long intervalLCD = 200;
-const long intervalLED = 30;
+static const long intervalLCD = 200;
+static const long intervalLED = 30;
 
-LiquidCrystal_I2C lcd = LiquidCrystal_I2C(
+static LiquidCrystal_I2C lcd = LiquidCrystal_I2C(
     LCD_ADDRESS, 
     MAX_CHAR_ON_SCREEN, 
     NUMBER_OF_ROWS
 );
 
-char strings[3][52] = { // hardcoded because message are fixed
+static char strings[3][52] = { // hardcoded because message are fixed
   "Welcome to the React! Game. Press Buttons to Start ",
   "Game Over - Tie ",
   "Game Over - The winner is XX "
 };
 
-unsigned long currentTimeLED;
-unsigned long currentTimeLCD;
+static unsigned long previousTimeLED = 0;
+static unsigned long previousTimeLCD = 0;
 
-unsigned long previousTimeLED = 0;
-unsigned long previousTimeLCD = 0;
-int pos = 0;
+static int brightness1 = 0;
+static int brightness2 = 255;
+static const int fadeAmount = 5;
 
-int brightness1 = 0;
-int brightness2 = 255;
-int fadeAmount = 5;
-
-uint8_t outputPins[NUM_LEDS] = {
+static uint8_t outputPins[NUM_LEDS] = {
   P1_RED_LED_PIN, 
   P1_GREEN_LED_PIN, 
   P2_RED_LED_PIN,
@@ -91,8 +87,9 @@ void resetOutput() {
   lcd.noBacklight();  
 }
 
-void rotateCharOnScreen(const char* str) {  // TODO: DA METTERE COME PARAMETRO IL MessageType E INCAPSULARE LA SCELTA DELLA STRINGA
-  currentTimeLCD = millis();
+void rotateCharOnScreen(const char* str) {
+  unsigned long currentTimeLCD = millis();
+  static int pos = 0;
 
   if (currentTimeLCD - previousTimeLCD < intervalLCD) {
     return;
@@ -122,7 +119,7 @@ void rotateCharOnScreen(const char* str) {  // TODO: DA METTERE COME PARAMETRO I
 
 /* TODO: Si puo usare una sola variabile brightness calcolando la luminosita del led complementare con 255 - brigtness */
 void fadeLed() {
-  currentTimeLED = millis(); 
+  unsigned long currentTimeLED = millis();
 
   if (currentTimeLED - previousTimeLED >= intervalLED) {
     previousTimeLED = currentTimeLED;
