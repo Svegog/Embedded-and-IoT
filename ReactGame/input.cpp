@@ -11,7 +11,7 @@ volatile int numberOfPress[NUM_PLAYERS];
 volatile bool buttonPressed[NUM_BUTTONS] = {false, false};
 
 /* used for debouncing */
-volatile long lastButtonPressedTimestamps[NUM_BUTTONS];
+volatile unsigned long lastButtonPressedTimestamps[NUM_BUTTONS];
 
 void buttonHandler(int i);
 void buttonHandlerP1(){ buttonHandler(P1); }
@@ -77,7 +77,10 @@ int getSensorValue() {
   return analogRead(POTENT_PIN);
 }
 
-long getLastPressTimestamp(int i) {
-  return lastButtonPressedTimestamps[i];
+unsigned long getLastPressTimestamp(int i) {
+  noInterrupts();
+  unsigned long tsmp = lastButtonPressedTimestamps[i];
+  interrupts();
+  return tsmp;
 }
 
