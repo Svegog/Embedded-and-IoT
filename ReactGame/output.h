@@ -14,14 +14,10 @@ void showStartScreen();
 void showResultScreen(int p1, int p2);
 
 void resetOutput();
-void rotateCharOnScreen(const char* str);
 void rotateMessage(MessageType type);
 void fadeLed();
 void printValue(int N);
-int getGreenLed(int player);
-int getRedLed(int player);
 void changeLedState(int player, int point, int state);
-const char* getGameMessage(MessageType type);
 void updateWinnerString(int winner);
 void printLevelDifficulty(int choice);
  

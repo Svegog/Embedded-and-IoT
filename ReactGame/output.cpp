@@ -13,6 +13,11 @@
 #define FIRST_POSITION_TO_MODIFY 26
 #define SECOND_POSITION_TO_MODIFY 27
 
+static const char* getGameMessage(MessageType type);
+static void rotateCharOnScreen(const char* str);
+static int getGreenLed(int player);
+static int getRedLed(int player);
+
 static const long intervalLCD = 200;
 static const long intervalLED = 30;
 
@@ -87,7 +92,7 @@ void resetOutput() {
   lcd.noBacklight();  
 }
 
-void rotateCharOnScreen(const char* str) {
+static void rotateCharOnScreen(const char* str) {
   unsigned long currentTimeLCD = millis();
   static int pos = 0;
 
@@ -142,11 +147,11 @@ void printValue(int N) {
   lcd.print(N);
 }
 
-int getGreenLed(int player) {
+static int getGreenLed(int player) {
   return outputPins[player*2 + 1];
 }
 
-int getRedLed(int player) {
+static int getRedLed(int player) {
   return outputPins[player*2];
 }
 
@@ -159,7 +164,7 @@ void changeLedState(int player, int point, int state) {
   digitalWrite(pin, value);
 }
 
-const char* getGameMessage(MessageType type) {
+static const char* getGameMessage(MessageType type) {
   return strings[type];
 }
 
