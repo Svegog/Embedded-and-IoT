@@ -25,7 +25,6 @@ static int N;
 
 static unsigned long previousTimePot;
 
-static unsigned long pressTimestamp[NUM_PLAYERS];
 static int roundScores[NUM_PLAYERS];
 
 void printStartSection() {

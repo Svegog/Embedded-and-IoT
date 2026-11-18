@@ -33,7 +33,7 @@ static unsigned long previousTimeLCD = 0;
 
 static int brightness1 = 0;
 static int brightness2 = 255;
-static const int fadeAmount = 5;
+static int fadeAmount = 5;
 
 static uint8_t outputPins[NUM_LEDS] = {
   P1_RED_LED_PIN, 
