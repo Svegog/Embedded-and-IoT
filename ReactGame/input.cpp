@@ -77,5 +77,7 @@ int getSensorValue() {
   return analogRead(POTENT_PIN);
 }
 
-
+long getLastPressTimestamp(int i) {
+  return lastButtonPressedTimestamps[i];
+}
 

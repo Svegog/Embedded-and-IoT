@@ -134,7 +134,6 @@ void ingame() {
     gamestarted = false;
     for (int i = 0; i < NUM_PLAYERS; i++) {
       roundScores[i] = 0;
-      pressTimestamp[i] = 0;
     }
     resetInput(); // RIDONDANTE CON START ????
     resetOutput();
@@ -143,14 +142,10 @@ void ingame() {
   unsigned long dt = getCurrentTimeInState();
 
   for (int i = 0; i < NUM_PLAYERS; i++) {
-    unsigned long ts = millis();
     int presses = getNumberOfPress(i);
-    if (presses == 0) continue;
 
-    if (!gamestarted) {
+    if (presses != 0 && !gamestarted) {
       roundScores[i] = PENALTY;
-    } else if (presses == N && pressTimestamp[i] == 0) {
-      pressTimestamp[i] = ts;
     }
   }
 
@@ -176,7 +171,7 @@ void ingame() {
     }
 
     if (roundScores[0] == POINT && roundScores[1] == POINT) {
-      if (pressTimestamp[0] < pressTimestamp[1]) {
+      if (getLastPressTimestamp(0) < getLastPressTimestamp(1)) {
         roundScores[1] = 0;
       } else {
         roundScores[0] = 0;
