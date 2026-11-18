@@ -2,9 +2,9 @@
 #define __HW_PLATFORM__
 
 #include "config.h"
-#include "devices/Button.h"
-#include "devices/Led.h"
-#include "devices/ServoMotor.h"
+#include "devices/buttons/Button.h"
+#include "devices/leds/Led.h"
+#include "devices/servo/ServoMotor.h"
 
 class HWPlatform {
 
@@ -13,13 +13,19 @@ public:
   void init();
   void test();
 
-  Button* getButton();
-  Led*  getLed();
+  Button* getStartButton();
+  Button* getStopButton();
+  Button* getResetButton();
+  Led*  getWorkingLed();
+  Led*  getAlarmLed();
   ServoMotor* getMotor();
 
 private:
-  Button* pButton;
-  Led* pLed;
+  Button* startButton;
+  Button* stopButton;
+  Button* resetButton;
+  Led* workingLed;
+  Led* alarmLed;
   ServoMotor* pMotor;
   
 };

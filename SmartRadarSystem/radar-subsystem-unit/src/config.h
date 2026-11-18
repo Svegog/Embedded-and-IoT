@@ -1,8 +1,22 @@
 #ifndef __CONFIG__
 #define __CONFIG__
 
-#define BT_PIN     2
-#define LED_PIN    13
-#define MOTOR_PIN       9
+#define START_PIN 2
+#define STOP_PIN 3
+#define RESET_PIN 4
+
+#define WORKING_LED_PIN 5
+#define ALARM_LED_PIN 6
+
+#define POT_PIN A0
+#define TEMP_PIN A1
+#define SERVO_PIN 9
+
+#define TRIG_PIN 7 
+#define ECHO_PIN 8
+
+#define I2C_ADDRESS 0x27
+#define I2C_SDA A4
+#define I2C_SCL A5
 
 #endif
