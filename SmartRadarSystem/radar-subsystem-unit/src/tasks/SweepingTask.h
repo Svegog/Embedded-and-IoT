@@ -2,8 +2,8 @@
 #define __SWEEPING_TASK__
 
 #include "kernel/Task.h"
-#include "devices/ServoMotor.h"
-#include "devices/Button.h"
+#include "devices/servo/ServoMotor.h"
+#include "devices/buttons/Button.h"
 #include "model/Context.h"
 #include <Arduino.h>
 

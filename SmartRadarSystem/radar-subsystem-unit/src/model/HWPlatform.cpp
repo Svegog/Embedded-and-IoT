@@ -5,6 +5,9 @@
 #include "config.h"
 #include "devices/leds/Led.h"
 #include "devices/servo/ServoMotorImpl.h"
+#include "devices/sonar/Sonar.h"
+#include "devices/temp/TempSensorTMP36.h"
+#include "devices/potentiometer/Pot.h"
 #include "kernel/Logger.h"
 
 void wakeUp(){}
@@ -16,8 +19,11 @@ HWPlatform::HWPlatform(){
 
   workingLed = new Led(WORKING_LED_PIN);
   alarmLed = new Led(ALARM_LED_PIN);
-  
-  pMotor = new ServoMotorImpl(SERVO_PIN);
+
+  potentiometer = new Potentiometer(POT_PIN);
+  servo = new ServoMotorImpl(SERVO_PIN);
+  sonar = new Sonar(ECHO_PIN, TRIG_PIN, 6000); // DA DEFINIRE, MAX TIME DIPENDE DA TEMPERATURA, DISTANZA E VELOCITA' SERVO
+  tempSensor = new TempSensorTMP36(TEMP_PIN);
 }
 
 void HWPlatform::init(){
@@ -44,7 +50,19 @@ Led*  HWPlatform::getAlarmLed(){
 }
 
 ServoMotor* HWPlatform::getMotor(){
-  return this->pMotor;
+  return this->servo;
+}
+
+Sonar* HWPlatform::getSonar(){
+  return this->sonar;
+}
+
+TempSensor* HWPlatform::getTempSensor(){
+  return this->tempSensor;
+}
+
+Potentiometer* HWPlatform::getPotentiometer() {
+  return this->potentiometer;
 }
 
 void HWPlatform::test(){

@@ -3,7 +3,7 @@
 
 #include "kernel/Task.h"
 #include "model/Context.h"
-#include "devices/Led.h"
+#include "devices/leds/Led.h"
 #include <Arduino.h>
 
 class BlinkingTask: public Task {
