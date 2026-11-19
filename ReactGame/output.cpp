@@ -3,8 +3,6 @@
 #include "Arduino.h"
 #include "output.h"
 #include "config.h"
-#include "core.h"
-
 
 #define WINNER_STRING_INDEX 2
 #define MAX_CHAR_ON_SCREEN 16
@@ -12,6 +10,11 @@
 #define LCD_ADDRESS 0x27
 #define FIRST_POSITION_TO_MODIFY 26
 #define SECOND_POSITION_TO_MODIFY 27
+
+#define EASY 1
+#define MEDIUM 2
+#define HARD 3
+#define SUPER 4
 
 static const char* getGameMessage(MessageType type);
 static void rotateCharOnScreen(const char* str);
