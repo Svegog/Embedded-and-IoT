@@ -1,14 +1,14 @@
 #include "HWPlatform.h"
 #include <Arduino.h>
-#include "devices/buttons/ButtonImpl.h"
 #include "kernel/MsgService.h"
+#include "kernel/Logger.h"
 #include "config.h"
 #include "devices/leds/Led.h"
+#include "devices/buttons/ButtonImpl.h"
 #include "devices/servo/ServoMotorImpl.h"
 #include "devices/sonar/Sonar.h"
 #include "devices/temp/TempSensorTMP36.h"
 #include "devices/potentiometer/Pot.h"
-#include "kernel/Logger.h"
 
 void wakeUp(){}
 
@@ -22,11 +22,12 @@ HWPlatform::HWPlatform(){
 
   pPotentiometer = new Potentiometer(POT_PIN);
   pServo = new ServoMotorImpl(SERVO_PIN);
-  pSonar = new Sonar(ECHO_PIN, TRIG_PIN, 6000); // DA DEFINIRE, MAX TIME DIPENDE DA TEMPERATURA, DISTANZA E VELOCITA' SERVO
+  pSonar = new Sonar(ECHO_PIN, TRIG_PIN, SONAR_MAX_DIST); // DA DEFINIRE, MAX TIME DIPENDE DA TEMPERATURA, DISTANZA E VELOCITA' SERVO
   pTempSensor = new TempSensorTMP36(TEMP_PIN);
 }
 
 void HWPlatform::init(){
+  pSonar->setTemperature(pTempSensor->getTemperature());
 }
 
 Button* HWPlatform::getStartButton(){

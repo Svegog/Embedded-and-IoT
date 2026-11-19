@@ -7,7 +7,7 @@
 #include "devices/potentiometer/Pot.h"
 #include "devices/servo/ServoMotor.h"
 #include "devices/sonar/Sonar.h"
-#include "devices/temp/TempSensorTMP36.h"
+#include "devices/temp/TempSensor.h"
 
 class HWPlatform {
 
