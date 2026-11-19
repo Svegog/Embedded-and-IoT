@@ -162,8 +162,16 @@ void ingame() {
     changeState(RESULT_STATE);
     resetOutput();
     
-    updateResult();
+    bool nobodyPressed = updateResult();
+    changePoint(roundScores);
+    for (int i = 0; i < NUM_PLAYERS; i++){
+      changeLedState(i, roundScores[i], HIGH);
+    }
     decreaseTime();
+
+    if (nobodyPressed) {
+      changeState(GAMEOVER_STATE);
+    }
 
     resetInput();
   }
@@ -177,7 +185,7 @@ static void decreaseTime() {
   }
 }
 
-static void updateResult() {
+static bool updateResult() {
   int numberOfPresses[NUM_PLAYERS];
   for (int i = 0; i < NUM_PLAYERS; i++) {
     numberOfPresses[i] = getNumberOfPress(i);
@@ -196,13 +204,10 @@ static void updateResult() {
     }
   }
 
-  changePoint(roundScores);
-  for (int i = 0; i < NUM_PLAYERS; i++){
-    changeLedState(i, roundScores[i], HIGH);
-  }
-
   if (numberOfPresses[0] == 0 && numberOfPresses[1] == 0) {
-    changeState(GAMEOVER_STATE);
+    return true;
+  } else {
+    return false;
   }
 }
 
