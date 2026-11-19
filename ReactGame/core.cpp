@@ -15,6 +15,9 @@
 #define MINIMUM_DIFFICULTY 1
 #define MAXIMUM_DIFFICULTY 5 // need to be 1 over the real maximum difficulty so the map function can also output value 4
 
+static void decreaseTime();
+static void updateResult();
+
 static bool gamestarted = false;
 static bool endStringSet = false;
 
@@ -156,43 +159,50 @@ void ingame() {
 
 
   if (dt > (waitTime + T1) && gamestarted) {
-
     changeState(RESULT_STATE);
     resetOutput();
-    int numberOfPresses[NUM_PLAYERS];
-    for (int i = 0; i < NUM_PLAYERS; i++) {
-      numberOfPresses[i] = getNumberOfPress(i);
-      if (numberOfPresses[i] == N && roundScores[i] != PENALTY) {
-        roundScores[i] = POINT;
-      } else if (numberOfPresses[i] > N) {
-        roundScores[i] = PENALTY;
-      }
-    }
+    
+    updateResult();
+    decreaseTime();
 
-    if (roundScores[0] == POINT && roundScores[1] == POINT) {
-      if (getLastPressTimestamp(0) < getLastPressTimestamp(1)) {
-        roundScores[1] = 0;
-      } else {
-        roundScores[0] = 0;
-      }
-    }
-
-
-    changePoint(roundScores);
-    for (int i = 0; i < NUM_PLAYERS; i++){
-      changeLedState(i, roundScores[i], HIGH);
-    }
-
-    if (T1 > T1_MIN + reductionFactor) {
-      T1 -= reductionFactor;
-    } else {
-      T1 = T1_MIN;
-    }
-
-    if (numberOfPresses[0] == 0 && numberOfPresses[1] == 0) {
-      changeState(GAMEOVER_STATE);
-    }
     resetInput();
+  }
+}
+
+static void decreaseTime() {
+  if (T1 > T1_MIN + reductionFactor) {
+    T1 -= reductionFactor;
+  } else {
+    T1 = T1_MIN;
+  }
+}
+
+static void updateResult() {
+  int numberOfPresses[NUM_PLAYERS];
+  for (int i = 0; i < NUM_PLAYERS; i++) {
+    numberOfPresses[i] = getNumberOfPress(i);
+    if (numberOfPresses[i] == N && roundScores[i] != PENALTY) {
+      roundScores[i] = POINT;
+    } else if (numberOfPresses[i] > N) {
+      roundScores[i] = PENALTY;
+    }
+  }
+
+  if (roundScores[0] == POINT && roundScores[1] == POINT) {
+    if (getLastPressTimestamp(0) < getLastPressTimestamp(1)) {
+      roundScores[1] = 0;
+    } else {
+      roundScores[0] = 0;
+    }
+  }
+
+  changePoint(roundScores);
+  for (int i = 0; i < NUM_PLAYERS; i++){
+    changeLedState(i, roundScores[i], HIGH);
+  }
+
+  if (numberOfPresses[0] == 0 && numberOfPresses[1] == 0) {
+    changeState(GAMEOVER_STATE);
   }
 }
 
