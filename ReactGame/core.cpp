@@ -46,6 +46,7 @@ void initCore(){
   randomSeed(analogRead(SEED_PIN));
   reductionFactor = 0;
   initOutput();
+  initInput();
   Serial.println("Boot...");
 }
 

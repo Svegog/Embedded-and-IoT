@@ -3,7 +3,6 @@
 
 void setup() {
   initCore();
-  initInput();
   changeState(INTRO_STATE);
 }
 
