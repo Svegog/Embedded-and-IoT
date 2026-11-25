@@ -48,3 +48,17 @@ The deliverable must a zipped folder `assignment-01.zip` including two subfolder
 - `doc` including:
   - a representation of the schema/breadboard using tools such as TinkerCad or Fritzing or Eagle or others. 
   - a short video (or the link to a video on the cloud) demonstrating the system.
+
+### Design choices
+
+The specification leaves some aspects open. These are the choices we made on purpose:
+
+- **Each round always lasts the full T1 time.** The round is evaluated only when T1 expires, not as soon as a player reaches N presses. This lets the system detect a player who presses the button more than N times after reaching N, and apply the penalty. As a consequence, penalties for early presses (before N is shown) are also applied at the end of the round, together with the result.
+
+- **Tie-break when both players press N times.** If both players reach exactly N presses, the winner is the player whose last button event (press or release) happened first. In practice, the player who completes the whole sequence first, including releasing the button, wins the round.
+
+- **Fewer than N presses gives no penalty.** A player who presses the button fewer than N times does not lose a point: they simply get no point for that round. Only early presses and presses beyond N are penalised.
+
+- **An early press counts as a reaction.** The game ends only if neither player pressed the button at all during the round. If a player pressed too early (and got the penalty), the round is not considered "without reaction", so the game goes on to the next round instead of ending.
+
+- **Identical timestamps in the tie-break.** If both players' last button events have exactly the same timestamp (same millisecond), player #2 wins the round. This case is so unlikely in practice that we chose not to handle it separately.
