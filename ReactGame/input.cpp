@@ -6,12 +6,12 @@
 
 #define BOUNCING_TIME 40 // both HIGH and LOW state
 
-uint8_t inputPins[NUM_BUTTONS] = {P1_BUT_PIN, P2_BUT_PIN};
-volatile int numberOfPress[NUM_PLAYERS];
-volatile bool buttonPressed[NUM_BUTTONS] = {false, false};
+static uint8_t inputPins[NUM_BUTTONS] = {P1_BUT_PIN, P2_BUT_PIN};
+static volatile int numberOfPress[NUM_BUTTONS];
+static volatile bool buttonPressed[NUM_BUTTONS] = {false, false};
 
 /* used for debouncing */
-volatile long lastButtonPressedTimestamps[NUM_BUTTONS];
+static volatile unsigned long lastButtonPressedTimestamps[NUM_BUTTONS];
 
 void buttonHandler(int i);
 void buttonHandlerP1(){ buttonHandler(P1); }
@@ -77,5 +77,10 @@ int getSensorValue() {
   return analogRead(POTENT_PIN);
 }
 
-
+unsigned long getLastPressTimestamp(int i) {
+  noInterrupts();
+  unsigned long tsmp = lastButtonPressedTimestamps[i];
+  interrupts();
+  return tsmp;
+}
 

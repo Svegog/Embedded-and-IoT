@@ -7,5 +7,6 @@ bool isButtonPressed(int buttonIndex);
 bool allButtonPressed();
 int getNumberOfPress(int player);
 int getSensorValue();
+unsigned long getLastPressTimestamp(int i);
  
 #endif

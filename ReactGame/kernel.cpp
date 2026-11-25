@@ -1,16 +1,16 @@
 #include "kernel.h"
 
 /* current state */
-int currentState;
+static int currentState;
 
 /* time registered when entering the new state */
-unsigned long enteredStateTime;
+static unsigned long enteredStateTime;
 
 /* how long it the game is in current state */
-unsigned long currentTimeInState;
+static unsigned long currentTimeInState;
 
 /* flag which is true if it is the first cycle in that state */
-bool firstCheckInState; 
+static bool firstCheckInState;
 
 /* state management procedures */
 

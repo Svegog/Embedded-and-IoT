@@ -15,15 +15,20 @@
 #define MINIMUM_DIFFICULTY 1
 #define MAXIMUM_DIFFICULTY 5 // need to be 1 over the real maximum difficulty so the map function can also output value 4
 
-bool gamestarted = false;
-bool endStringSet = false;
+static void decreaseTime();
+static bool updateRoundResult();
 
-unsigned long T1 = T1_INITIAL;
-unsigned long waitTime;
-unsigned long reductionFactor;
-int N;
+static bool gamestarted = false;
+static bool endStringSet = false;
 
-unsigned long previousTimePot;
+static unsigned long T1 = T1_INITIAL;
+static unsigned long waitTime;
+static unsigned long reductionFactor;
+static int N;
+
+static unsigned long previousTimePot;
+
+static int roundScores[NUM_PLAYERS];
 
 void printStartSection() {
   Serial.println("Choose difficulty with potentiometer");
@@ -40,6 +45,8 @@ void initCore(){
   Serial.begin(BAUD_RATE);
   randomSeed(analogRead(SEED_PIN));
   reductionFactor = 0;
+  initOutput();
+  initInput();
   Serial.println("Boot...");
 }
 
@@ -48,9 +55,8 @@ void intro(){
     Serial.println("Intro...");
     printStartSection();
   
-    initOutput();  // TODO: Da spostare in initCore o in setup del superloop
     showIntroScreen();
-    resetInput();  // ?? E VERAMENTE NECESSARIO ???
+    resetInput();
 
     previousTimePot = 0;
   }
@@ -62,7 +68,7 @@ void intro(){
     return;
   }
 
-  rotateCharOnScreen(getGameMessage(WELCOME_STR));
+  showMessage(WELCOME_STR);
   fadeLed();
   
   if (dt - previousTimePot > POTENTIOMETER_DELAY) {
@@ -113,7 +119,6 @@ void start(){
     T1 = T1_INITIAL;
     resetOutput();
     showStartScreen();
-    resetInput();  // SUPERFLUO ???
     resetPoint();
   }
 
@@ -124,44 +129,26 @@ void start(){
   }
 }
 
-/* TODO: Bisogna inserire un timeout quando uno arriva al numero giusto per vedere se preme troppe volte */
 void ingame() {
   if (isJustEnteredInState()) {
     Serial.println("In Game...");
     waitTime = random(0, MAX_WAIT + 1);
     gamestarted = false;
-    resetInput(); // RIDONDANTE CON START ????
+    for (int i = 0; i < NUM_PLAYERS; i++) {
+      roundScores[i] = 0;
+    }
+    resetInput();
     resetOutput();
   }
 
   unsigned long dt = getCurrentTimeInState();
 
-  /* NON MI PIACE IL CONTINUE */
   for (int i = 0; i < NUM_PLAYERS; i++) {
     int presses = getNumberOfPress(i);
-    if (presses == 0) continue;
 
-    int value;
-    if (!gamestarted) {
-      value = PENALTY;
-    } else if (presses == N) {
-      value = POINT;
-    } else {
-      continue;
+    if (presses != 0 && !gamestarted) {
+      roundScores[i] = PENALTY;
     }
-
-    changeState(RESULT_STATE);
-    resetInput();
-    resetOutput();
-    changePoint(i, value);
-    changeLedState(i, value, HIGH);
-
-    if (T1 > T1_MIN + reductionFactor) {
-      T1 -= reductionFactor;
-    } else {
-      T1 = T1_MIN;
-    }
-    return;
   }
 
   if (!gamestarted && dt > waitTime) {
@@ -170,10 +157,50 @@ void ingame() {
     printValue(N);
   }
 
-
   if (dt > (waitTime + T1) && gamestarted) {
-      changeState(GAMEOVER_STATE);
+    resetOutput();
+    
+    bool nobodyPressed = updateRoundResult();
+    changePoint(roundScores);
+    for (int i = 0; i < NUM_PLAYERS; i++){
+      changeLedState(i, roundScores[i], HIGH);
+    }
+    decreaseTime();
+
+    changeState(nobodyPressed ? GAMEOVER_STATE : RESULT_STATE);
+
+    resetInput();
   }
+}
+
+static void decreaseTime() {
+  if (T1 > T1_MIN + reductionFactor) {
+    T1 -= reductionFactor;
+  } else {
+    T1 = T1_MIN;
+  }
+}
+
+static bool updateRoundResult() {
+  int numberOfPresses[NUM_PLAYERS];
+  for (int i = 0; i < NUM_PLAYERS; i++) {
+    numberOfPresses[i] = getNumberOfPress(i);
+    if (numberOfPresses[i] == N && roundScores[i] != PENALTY) {
+      roundScores[i] = POINT;
+    } else if (numberOfPresses[i] > N) {
+      roundScores[i] = PENALTY;
+    }
+  }
+
+  if (roundScores[0] == POINT && roundScores[1] == POINT) {
+    if (getLastPressTimestamp(0) < getLastPressTimestamp(1)) {
+      roundScores[1] = 0;
+    } else {
+      roundScores[0] = 0;
+    }
+  }
+
+  return (numberOfPresses[0] == 0 && numberOfPresses[1] == 0);
 }
 
 void result() {
@@ -206,14 +233,14 @@ void gameOver(){
   }
 
   if (isTie()) {
-    rotateCharOnScreen(getGameMessage(GAMEOVER_TIE_STR));
+    showMessage(GAMEOVER_TIE_STR);
   } else {
     if (!endStringSet) {
       int winner = getWinner();
       updateWinnerString(winner);
       endStringSet = true;
     }
-    rotateCharOnScreen(getGameMessage(GAMEOVER_WINNER_STR));
+    showMessage(GAMEOVER_WINNER_STR);
   }
 
   unsigned long dt = getCurrentTimeInState();

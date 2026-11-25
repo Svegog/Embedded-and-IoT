@@ -4,7 +4,6 @@
 #include "output.h"
 #include "config.h"
 
-
 #define WINNER_STRING_INDEX 2
 #define MAX_CHAR_ON_SCREEN 16
 #define NUMBER_OF_ROWS 2
@@ -12,33 +11,39 @@
 #define FIRST_POSITION_TO_MODIFY 26
 #define SECOND_POSITION_TO_MODIFY 27
 
-const long intervalLCD = 200;
-const long intervalLED = 30;
+#define EASY 1
+#define MEDIUM 2
+#define HARD 3
+#define SUPER 4
 
-LiquidCrystal_I2C lcd = LiquidCrystal_I2C(
+static const char* getGameMessage(MessageType type);
+static void rotateCharOnScreen(const char* str);
+static int getGreenLed(int player);
+static int getRedLed(int player);
+
+static const long intervalLCD = 200;
+static const long intervalLED = 30;
+
+static LiquidCrystal_I2C lcd = LiquidCrystal_I2C(
     LCD_ADDRESS, 
     MAX_CHAR_ON_SCREEN, 
     NUMBER_OF_ROWS
 );
 
-char strings[3][52] = { // hardcoded because message are fixed
+static char strings[3][52] = { // hardcoded because message are fixed
   "Welcome to the React! Game. Press Buttons to Start ",
   "Game Over - Tie ",
   "Game Over - The winner is XX "
 };
 
-unsigned long currentTimeLED;
-unsigned long currentTimeLCD;
+static unsigned long previousTimeLED = 0;
+static unsigned long previousTimeLCD = 0;
 
-unsigned long previousTimeLED = 0;
-unsigned long previousTimeLCD = 0;
-int pos = 0;
+static int brightness1 = 0;
+static int brightness2 = 255;
+static int fadeAmount = 5;
 
-int brightness1 = 0;
-int brightness2 = 255;
-int fadeAmount = 5;
-
-uint8_t outputPins[NUM_LEDS] = {
+static uint8_t outputPins[NUM_LEDS] = {
   P1_RED_LED_PIN, 
   P1_GREEN_LED_PIN, 
   P2_RED_LED_PIN,
@@ -90,8 +95,9 @@ void resetOutput() {
   lcd.noBacklight();  
 }
 
-void rotateCharOnScreen(const char* str) {  // TODO: DA METTERE COME PARAMETRO IL MessageType E INCAPSULARE LA SCELTA DELLA STRINGA
-  currentTimeLCD = millis();
+static void rotateCharOnScreen(const char* str) {
+  unsigned long currentTimeLCD = millis();
+  static int pos = 0;
 
   if (currentTimeLCD - previousTimeLCD < intervalLCD) {
     return;
@@ -121,7 +127,7 @@ void rotateCharOnScreen(const char* str) {  // TODO: DA METTERE COME PARAMETRO I
 
 /* TODO: Si puo usare una sola variabile brightness calcolando la luminosita del led complementare con 255 - brigtness */
 void fadeLed() {
-  currentTimeLED = millis(); 
+  unsigned long currentTimeLED = millis();
 
   if (currentTimeLED - previousTimeLED >= intervalLED) {
     previousTimeLED = currentTimeLED;
@@ -142,24 +148,31 @@ void printValue(int N) {
   backlightOn();
   lcd.setCursor(8, 0);
   lcd.print(N);
-}0x27
+}
 
-int getGreenLed(int player) {
+static int getGreenLed(int player) {
   return outputPins[player*2 + 1];
 }
 
-int getRedLed(int player) {
+static int getRedLed(int player) {
   return outputPins[player*2];
 }
 
 void changeLedState(int player, int point, int state) {
+  if (point == 0) {
+    return;
+  }
   int value = (state > 0) ? HIGH : LOW;
   int pin = (point > 0) ? getGreenLed(player) : getRedLed(player);
   digitalWrite(pin, value);
 }
 
-const char* getGameMessage(MessageType type) {
+static const char* getGameMessage(MessageType type) {
   return strings[type];
+}
+
+void showMessage(MessageType type) {
+  rotateCharOnScreen(getGameMessage(type));
 }
 
 void updateWinnerString(int winner) {
