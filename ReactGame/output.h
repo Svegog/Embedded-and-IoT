@@ -14,7 +14,7 @@ void showStartScreen();
 void showResultScreen(int p1, int p2);
 
 void resetOutput();
-void rotateMessage(MessageType type);
+void showMessage(MessageType type);
 void fadeLed();
 void printValue(int N);
 void changeLedState(int player, int point, int state);

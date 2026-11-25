@@ -171,7 +171,7 @@ static const char* getGameMessage(MessageType type) {
   return strings[type];
 }
 
-void rotateMessage(MessageType type) {
+void showMessage(MessageType type) {
   rotateCharOnScreen(getGameMessage(type));
 }
 
