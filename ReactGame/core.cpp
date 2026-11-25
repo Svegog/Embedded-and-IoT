@@ -16,7 +16,7 @@
 #define MAXIMUM_DIFFICULTY 5 // need to be 1 over the real maximum difficulty so the map function can also output value 4
 
 static void decreaseTime();
-static bool updateResult();
+static bool updateRoundResult();
 
 static bool gamestarted = false;
 static bool endStringSet = false;
@@ -153,7 +153,6 @@ void ingame() {
 
   if (!gamestarted && dt > waitTime) {
     gamestarted = true;
-    resetInput();
     N = random(1, 4);
     printValue(N);
   }
@@ -161,7 +160,7 @@ void ingame() {
   if (dt > (waitTime + T1) && gamestarted) {
     resetOutput();
     
-    bool nobodyPressed = updateResult();
+    bool nobodyPressed = updateRoundResult();
     changePoint(roundScores);
     for (int i = 0; i < NUM_PLAYERS; i++){
       changeLedState(i, roundScores[i], HIGH);
@@ -182,7 +181,7 @@ static void decreaseTime() {
   }
 }
 
-static bool updateResult() {
+static bool updateRoundResult() {
   int numberOfPresses[NUM_PLAYERS];
   for (int i = 0; i < NUM_PLAYERS; i++) {
     numberOfPresses[i] = getNumberOfPress(i);
